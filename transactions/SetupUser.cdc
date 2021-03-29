@@ -4,7 +4,7 @@ import RoxItems from 0xNFTCONTRACTADDRESS
 transaction {
     prepare(signer: AuthAccount) {
       // if the account doesn't already have a collection
-      if signer.borrow<&RoxItems.CollectionPrivate>(from: RoxItems.CollectionStoragePath) == nil {
+      if signer.borrow<&RoxItems.CollectionPrivate>(from: RoxItems.CollectionStoragePath) != nil {
         log("Signer has completed set up before")
         return
       }
