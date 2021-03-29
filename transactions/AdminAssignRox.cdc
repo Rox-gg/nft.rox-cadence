@@ -1,5 +1,5 @@
-import NonFungibleToken from 0xf8d6e0586b0a20c7
-import RoxItems from 0xf8d6e0586b0a20c7
+import NonFungibleToken from 0xNFTADDRESS
+import RoxItems from 0xNFTCONTRACTADDRESS
 
 transaction(recipient: Address, typeID: UInt64) {
     

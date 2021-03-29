@@ -3,14 +3,18 @@ package test
 import (
 	"testing"
 
+	"github.com/onflow/flow-go-sdk"
+	"github.com/onflow/flow-go-sdk/crypto"
 	sdktemplates "github.com/onflow/flow-go-sdk/templates"
+	"github.com/onflow/flow-go-sdk/test"
 
 	"github.com/onflow/flow-nft/lib/go/contracts"
+	"github.com/onflow/flow-nft/lib/go/templates"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNFTDeployment(t *testing.T) {
+func TestRoxItemsDeployment(t *testing.T) {
 	b := newBlockchain()
 
 	// Should be able to deploy a contract as a new account with no keys.
@@ -47,7 +51,6 @@ func TestNFTDeployment(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-/*
 func TestCreateNFT(t *testing.T) {
 	b := newBlockchain()
 
@@ -66,34 +69,35 @@ func TestCreateNFT(t *testing.T) {
 	)
 
 	// First, deploy the contract
-	tokenCode := contracts.ExampleNFT(nftAddr.String())
+	tokenCode := contracts.RoxItems(nftAddr.String())
 	tokenAccountKey, tokenSigner := accountKeys.NewWithSigner()
 	tokenAddr, _ := b.CreateAccount(
 		[]*flow.AccountKey{tokenAccountKey},
 		[]sdktemplates.Contract{
 			{
-				Name:   "ExampleNFT",
+				Name:   "RoxItems",
 				Source: string(tokenCode),
 			},
 		},
 	)
 
-	script := templates.GenerateInspectNFTSupplyScript(nftAddr, tokenAddr, "ExampleNFT", 0)
+	script := templates.GenerateInspectNFTSupplyScript(nftAddr, tokenAddr, "RoxItems", 0)
 	executeScriptAndCheck(t, b, script, nil)
 
 	script = templates.GenerateInspectCollectionLenScript(
 		nftAddr,
 		tokenAddr,
 		tokenAddr,
-		"ExampleNFT",
-		"NFTCollection",
+		"RoxItems",
+		"RoxItemsCollection",
 		0,
 	)
+
 	executeScriptAndCheck(t, b, script, nil)
 
 	t.Run("Should be able to mint a token", func(t *testing.T) {
 
-		script := templates.GenerateMintNFTScript(nftAddr, tokenAddr, tokenAddr)
+		script := templates.GenerateMintNFTTransaction(nftAddr, tokenAddr, tokenAddr)
 		tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
 
 		signAndSubmit(
@@ -114,8 +118,8 @@ func TestCreateNFT(t *testing.T) {
 			nftAddr,
 			tokenAddr,
 			tokenAddr,
-			"ExampleNFT",
-			"NFTCollection",
+			"RoxItems",
+			"RoxItemsCollection",
 			0,
 		)
 		executeScriptAndCheck(t, b, script, nil)
@@ -124,35 +128,35 @@ func TestCreateNFT(t *testing.T) {
 			nftAddr,
 			tokenAddr,
 			tokenAddr,
-			"ExampleNFT",
-			"NFTCollection",
+			"RoxItems",
+			"RoxItemsCollection",
 			1,
 		)
 		executeScriptAndCheck(t, b, script, nil)
 
-		script = templates.GenerateInspectNFTSupplyScript(nftAddr, tokenAddr, "ExampleNFT", 1)
+		script = templates.GenerateInspectNFTSupplyScript(nftAddr, tokenAddr, "RoxItems", 1)
 		executeScriptAndCheck(t, b, script, nil)
-
 	})
+	/*
+		t.Run("Shouldn't be able to borrow a reference to an NFT that doesn't exist", func(t *testing.T) {
 
-	t.Run("Shouldn't be able to borrow a reference to an NFT that doesn't exist", func(t *testing.T) {
-
-		// Assert that the account's collection is correct
-		script := templates.GenerateInspectCollectionScript(
-			nftAddr,
-			tokenAddr,
-			tokenAddr,
-			"ExampleNFT",
-			"NFTCollection",
-			5,
-		)
-		result, err := b.ExecuteScript(script, nil)
-		require.NoError(t, err)
-		assert.True(t, result.Reverted())
-	})
+			// Assert that the account's collection is correct
+			script := templates.GenerateInspectCollectionScript(
+				nftAddr,
+				tokenAddr,
+				tokenAddr,
+				"ExampleNFT",
+				"NFTCollection",
+				5,
+			)
+			result, err := b.ExecuteScript(script, nil)
+			require.NoError(t, err)
+			assert.True(t, result.Reverted())
+		}) */
 
 }
 
+/*
 func TestTransferNFT(t *testing.T) {
 	b := newBlockchain()
 

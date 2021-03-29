@@ -154,6 +154,10 @@ pub contract RoxItems: NonFungibleToken {
         let minter <- create NFTMinter()
         self.account.save(<-minter, to: self.MinterStoragePath)
 
+        let collection <- RoxItems.createEmptyCollection()
+        self.account.save(<-collection, to: RoxItems.CollectionStoragePath)
+        self.account.link<&RoxItems.CollectionPrivate{NonFungibleToken.CollectionPublic, RoxItems.RoxItemsCollectionPublic}>(RoxItems.CollectionPublicPath, target: RoxItems.CollectionStoragePath)
+
         emit ContractInitialized()
 	}
 }
