@@ -5,31 +5,16 @@ import (
 	"strings"
 )
 
-// xx go-bindata -prefix ../../../transactions/... -o internal/assets/assets.go -pkg assets -nometadata -nomemcopy ../../../transactions/...
-
 const (
-	placeholderFungibleTokenAddress = "0xFUNGIBLETOKENADDRESS"
-	placeholderFlowTokenAddress     = "0xFLOWTOKENADDRESS"
-	placeholderNFTAddress           = "0xNFTADDRESS"
-	placeholderTopShotAddress       = "0xTOPSHOTADDRESS"
-	placeholderTopShotMarketAddress = "0xMARKETADDRESS"
-	placeholderShardedAddress       = "0xSHARDEDADDRESS"
-	placeholderAdminReceiverAddress = "0xADMINRECEIVERADDRESS"
-	placeholderDUCAddress           = "0xDUCADDRESS"
-	placeholderForwardingAddress    = "0xFORWARDINGADDRESS"
+	defaultNFTAddress      = "0xNFTADDRESS"
+	defaultContractAddress = "0xNFTCONTRACTADDRESS"
+	defaultContractName    = "0xRoxItems"
+	defaultContractStorage = "0xRoxItemsCollection"
 )
 
 type Environment struct {
-	Network              string
-	FungibleTokenAddress string
-	FlowTokenAddress     string
-	NFTAddress           string
-	TopShotAddress       string
-	TopShotMarketAddress string
-	ShardedAddress       string
-	AdminReceiverAddress string
-	DUCAddress           string
-	ForwardingAddress    string
+	NonFungibleTokenAddress string
+	ContractAddress         string
 }
 
 func uint32ToCadenceArr(nums []uint32) []byte {
@@ -57,56 +42,13 @@ func replaceAddresses(code string, env Environment) string {
 
 	code = strings.ReplaceAll(
 		code,
-		placeholderFungibleTokenAddress,
-		withHexPrefix(env.FungibleTokenAddress),
+		defaultNFTAddress,
+		withHexPrefix(env.NonFungibleTokenAddress),
 	)
-
 	code = strings.ReplaceAll(
 		code,
-		placeholderFlowTokenAddress,
-		withHexPrefix(env.FlowTokenAddress),
-	)
-
-	code = strings.ReplaceAll(
-		code,
-		placeholderNFTAddress,
-		withHexPrefix(env.NFTAddress),
-	)
-
-	code = strings.ReplaceAll(
-		code,
-		placeholderTopShotAddress,
-		withHexPrefix(env.TopShotAddress),
-	)
-
-	code = strings.ReplaceAll(
-		code,
-		placeholderTopShotMarketAddress,
-		withHexPrefix(env.TopShotMarketAddress),
-	)
-
-	code = strings.ReplaceAll(
-		code,
-		placeholderShardedAddress,
-		withHexPrefix(env.ShardedAddress),
-	)
-
-	code = strings.ReplaceAll(
-		code,
-		placeholderAdminReceiverAddress,
-		withHexPrefix(env.AdminReceiverAddress),
-	)
-
-	code = strings.ReplaceAll(
-		code,
-		placeholderDUCAddress,
-		withHexPrefix(env.DUCAddress),
-	)
-
-	code = strings.ReplaceAll(
-		code,
-		placeholderForwardingAddress,
-		withHexPrefix(env.ForwardingAddress),
+		defaultContractAddress,
+		withHexPrefix(env.ContractAddress),
 	)
 
 	return code

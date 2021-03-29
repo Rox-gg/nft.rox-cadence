@@ -2,7 +2,6 @@ package templates
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/onflow/flow-go-sdk"
 
@@ -37,59 +36,17 @@ func GenerateInspectCollectionScript(nftAddr, tokenAddr, userAddr flow.Address, 
 // GenerateInspectCollectionLenScript creates a script that retrieves an NFT collection
 // from storage and tries to borrow a reference for an NFT that it owns.
 // If it owns it, it will not fail.
-func GenerateInspectCollectionLenScript(nftAddr, tokenAddr, userAddr flow.Address, tokenContractName, storageLocation string) []byte {
+func GenerateInspectCollectionLenScript(env Environment) []byte {
 	code := assets.MustAssetString(nftCollectionLengthFileName)
 
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTAddress,
-		"0x"+nftAddr.String(),
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultContractAddress,
-		"0x"+tokenAddr.String(),
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTName,
-		"0x"+tokenContractName,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTStorage,
-		"0x"+"TODO",
-	)
-
-	return []byte(code)
+	return []byte(replaceAddresses(code, env))
 }
 
 // GenerateInspectNFTSupplyScript creates a script that reads
 // the total supply of tokens in existence
 // and makes assertions about the number
-func GenerateInspectNFTSupplyScript(nftAddr, tokenAddr flow.Address, tokenContractName string) []byte {
+func GenerateInspectNFTSupplyScript(env Environment) []byte {
 	code := assets.MustAssetString(roxItemsTotalSupplyFileName)
 
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTAddress,
-		"0x"+nftAddr.String(),
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultContractAddress,
-		"0x"+tokenAddr.String(),
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTName,
-		"0x"+tokenContractName,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTStorage,
-		"0x"+"TODO",
-	)
-
-	return []byte(code)
+	return []byte(replaceAddresses(code, env))
 }

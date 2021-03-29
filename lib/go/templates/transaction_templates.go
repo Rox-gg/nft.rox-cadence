@@ -4,18 +4,12 @@ package templates
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/onflow/flow-go-sdk"
 	"github.com/onflow/flow-nft/lib/go/templates/internal/assets"
 )
 
 const (
-	defaultNFTAddress      = "NFTADDRESS"
-	defaultContractAddress = "NFTCONTRACTADDRESS"
-	defaultNFTName         = "RoxItems"
-	defaultNFTStorage      = "RoxItemsCollection"
-
 	transactionsPath         = "../../../templates/"
 	createCollectionFilename = "transactions/SetupUser.cdc"
 	adminAssignRoxFilename   = "transactions/AdminAssignRox.cdc"
@@ -25,89 +19,26 @@ const (
 // GenerateCreateCollectionScript Creates a script that instantiates a new
 // NFT collection instance, stores the collection in memory, then stores a
 // reference to the collection.
-func GenerateCreateCollectionScript(nftAddr, tokenAddr, tokenContractName string, storageName string) []byte {
+func GenerateCreateCollectionScript(env Environment) []byte {
 	code := assets.MustAssetString(createCollectionFilename)
 
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTAddress,
-		"0x"+nftAddr,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultContractAddress,
-		"0x"+tokenAddr,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTName,
-		"0x"+tokenContractName,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTStorage,
-		"0x"+storageName,
-	)
-
-	return []byte(code)
+	return []byte(replaceAddresses(code, env))
 }
 
 // GenerateMintNFTScript Creates a script that uses the admin resource
 // to mint a new NFT and deposit it into a user's collection
-func GenerateMintNFTTransaction(nftAddr, tokenAddr, tokenContractName string, storageName string) []byte {
+func GenerateMintNFTTransaction(env Environment) []byte {
 	code := assets.MustAssetString(adminAssignRoxFilename)
 
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTAddress,
-		"0x"+nftAddr,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultContractAddress,
-		"0x"+tokenAddr,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTName,
-		"0x"+tokenContractName,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTStorage,
-		"0x"+storageName,
-	)
-
-	return []byte(code)
+	return []byte(replaceAddresses(code, env))
 }
 
 // GenerateTransferScript creates a script that withdraws an NFT token
 // from a collection and deposits it to another collection
-func GenerateTransferScript(nftAddr, tokenAddr, tokenContractName string, storageName string) []byte {
+func GenerateTransferScript(env Environment) []byte {
 	code := assets.MustAssetString(transferRoxFilename)
 
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTAddress,
-		"0x"+nftAddr,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultContractAddress,
-		"0x"+tokenAddr,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTName,
-		"0x"+tokenContractName,
-	)
-	code = strings.ReplaceAll(
-		code,
-		"0x"+defaultNFTStorage,
-		"0x"+storageName,
-	)
-
-	return []byte(code)
+	return []byte(replaceAddresses(code, env))
 }
 
 // GenerateDestroyScript creates a script that withdraws an NFT token
