@@ -3,8 +3,11 @@ package templates
 //go:generate go-bindata -prefix ../../../transactions -o internal/assets/assets.go -pkg assets -nometadata -nomemcopy ../../../transactions
 
 import (
+	"fmt"
 	"strings"
 
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/onflow/flow-go-sdk"
 	"github.com/onflow/flow-nft/lib/go/templates/internal/assets"
 )
 
@@ -107,7 +110,6 @@ func GenerateTransferScript(nftAddr, tokenAddr, tokenContractName string, storag
 	return []byte(code)
 }
 
-/*
 // GenerateDestroyScript creates a script that withdraws an NFT token
 // from a collection and destroys it
 func GenerateDestroyScript(nftAddr, tokenAddr flow.Address, tokenContractName, storageLocation string, destroyNFTID int) []byte {
@@ -118,7 +120,7 @@ func GenerateDestroyScript(nftAddr, tokenAddr flow.Address, tokenContractName, s
 		transaction {
 		  prepare(acct: AuthAccount) {
 
-			let collection <- acct.load<@%s.Collection>(from:/storage/%s)!
+			let collection <- acct.load<@%s.CollectionPrivate>(from:/storage/%s)!
 
 			let nft <- collection.withdraw(withdrawID: %d)
 
@@ -128,7 +130,6 @@ func GenerateDestroyScript(nftAddr, tokenAddr flow.Address, tokenContractName, s
 		  }
 		}
 	`
-
+	log.Debug(fmt.Sprintf(template, nftAddr, tokenContractName, tokenAddr.String(), tokenContractName, storageLocation, destroyNFTID, storageLocation))
 	return []byte(fmt.Sprintf(template, nftAddr, tokenContractName, tokenAddr.String(), tokenContractName, storageLocation, destroyNFTID, storageLocation))
 }
-*/

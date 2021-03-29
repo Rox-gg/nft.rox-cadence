@@ -371,60 +371,60 @@ func TestTransferNFT(t *testing.T) {
 		executeScriptAndCheck(t, b, script, nil)
 
 	})
-	/*
-		// transfer an NFT
-		t.Run("Should be able to withdraw an NFT and destroy it, not reducing the supply", func(t *testing.T) {
 
-			script := templates.GenerateDestroyScript(
-				nftAddr,
-				tokenAddr,
-				"ExampleNFT",
-				"NFTCollection",
-				0,
-			)
-			tx := createTxWithTemplateAndAuthorizer(b, script, joshAddress)
+	// transfer an NFT
+	t.Run("Should be able to withdraw an NFT and destroy it, not reducing the supply", func(t *testing.T) {
 
-			signAndSubmit(
-				t, b, tx,
-				[]flow.Address{
-					b.ServiceKey().Address,
-					joshAddress,
-				},
-				[]crypto.Signer{
-					b.ServiceKey().Signer(),
-					joshSigner,
-				},
-				false,
-			)
+		script := templates.GenerateDestroyScript(
+			nftAddr,
+			tokenAddr,
+			"RoxItems",
+			"RoxItemsCollection",
+			0,
+		)
+		tx := createTxWithTemplateAndAuthorizer(b, script, joshAddress)
 
-			script = templates.GenerateInspectCollectionLenScript(
-				nftAddr,
-				tokenAddr,
+		signAndSubmit(
+			t, b, tx,
+			[]flow.Address{
+				b.ServiceKey().Address,
 				joshAddress,
-				"ExampleNFT",
-				"NFTCollection",
-				0,
-			)
-			executeScriptAndCheck(t, b, script, nil)
+			},
+			[]crypto.Signer{
+				b.ServiceKey().Signer(),
+				joshSigner,
+			},
+			false,
+		)
 
-			// Assert that the account's collection is correct
-			script = templates.GenerateInspectCollectionLenScript(
-				nftAddr,
-				tokenAddr,
-				tokenAddr,
-				"ExampleNFT",
-				"NFTCollection",
-				0,
-			)
-			executeScriptAndCheck(t, b, script, nil)
+		script = templates.GenerateInspectCollectionLenScript(
+			nftAddr,
+			tokenAddr,
+			joshAddress,
+			"RoxItems",
+			"RoxItemsCollection",
+			0,
+		)
+		executeScriptAndCheck(t, b, script, nil)
 
-			script = templates.GenerateInspectNFTSupplyScript(
-				nftAddr,
-				tokenAddr,
-				"ExampleNFT",
-				1,
-			)
-			executeScriptAndCheck(t, b, script, nil)
+		// Assert that the account's collection is correct
+		script = templates.GenerateInspectCollectionLenScript(
+			nftAddr,
+			tokenAddr,
+			tokenAddr,
+			"RoxItems",
+			"RoxItemsCollection",
+			0,
+		)
+		executeScriptAndCheck(t, b, script, nil)
 
-		}) */
+		script = templates.GenerateInspectNFTSupplyScript(
+			nftAddr,
+			tokenAddr,
+			"RoxItems",
+			1,
+		)
+		executeScriptAndCheck(t, b, script, nil)
+
+	})
 }
