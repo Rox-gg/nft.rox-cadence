@@ -1,12 +1,11 @@
 package templates
 
-//go:generate go-bindata -prefix ../../../transactions -o internal/assets/assets.go -pkg assets -nometadata -nomemcopy ../../../transactions
+//go:generate go-bindata -prefix ../../../templates/... -o internal/assets/assets.go -pkg assets -nometadata -nomemcopy ../../../templates/...
 
 import (
 	"fmt"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/log"
 	"github.com/onflow/flow-go-sdk"
 	"github.com/onflow/flow-nft/lib/go/templates/internal/assets"
 )
@@ -17,9 +16,10 @@ const (
 	defaultNFTName         = "RoxItems"
 	defaultNFTStorage      = "RoxItemsCollection"
 
-	createCollectionFilename = "SetupUser.cdc"
-	adminAssignRoxFilename   = "AdminAssignRox.cdc"
-	transferRoxFilename      = "TransferRox.cdc"
+	transactionsPath         = "../../../templates/"
+	createCollectionFilename = "transactions/SetupUser.cdc"
+	adminAssignRoxFilename   = "transactions/AdminAssignRox.cdc"
+	transferRoxFilename      = "transactions/TransferRox.cdc"
 )
 
 // GenerateCreateCollectionScript Creates a script that instantiates a new
@@ -130,6 +130,5 @@ func GenerateDestroyScript(nftAddr, tokenAddr flow.Address, tokenContractName, s
 		  }
 		}
 	`
-	log.Debug(fmt.Sprintf(template, nftAddr, tokenContractName, tokenAddr.String(), tokenContractName, storageLocation, destroyNFTID, storageLocation))
 	return []byte(fmt.Sprintf(template, nftAddr, tokenContractName, tokenAddr.String(), tokenContractName, storageLocation, destroyNFTID, storageLocation))
 }

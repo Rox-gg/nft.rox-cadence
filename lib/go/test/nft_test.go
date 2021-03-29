@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/onflow/cadence"
+	jsoncdc "github.com/onflow/cadence/encoding/json"
 	"github.com/onflow/flow-go-sdk"
 	"github.com/onflow/flow-go-sdk/crypto"
 	sdktemplates "github.com/onflow/flow-go-sdk/templates"
@@ -83,19 +84,19 @@ func TestCreateNFT(t *testing.T) {
 		},
 	)
 
-	script := templates.GenerateInspectNFTSupplyScript(nftAddr, tokenAddr, "RoxItems", 0)
-	executeScriptAndCheck(t, b, script, nil)
+	result := executeScriptAndCheck(t, b, templates.GenerateInspectNFTSupplyScript(nftAddr, tokenAddr, "RoxItems"), nil)
+	assert.Equal(t, cadence.NewUInt64(0), result)
 
-	script = templates.GenerateInspectCollectionLenScript(
+	var script = templates.GenerateInspectCollectionLenScript(
 		nftAddr,
 		tokenAddr,
 		tokenAddr,
 		"RoxItems",
 		"RoxItemsCollection",
-		0,
 	)
 
-	executeScriptAndCheck(t, b, script, nil)
+	result = executeScriptAndCheck(t, b, script, [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+	assert.Equal(t, cadence.NewInt(0), result)
 
 	t.Run("Should be able to mint a token", func(t *testing.T) {
 
@@ -137,12 +138,13 @@ func TestCreateNFT(t *testing.T) {
 			tokenAddr,
 			"RoxItems",
 			"RoxItemsCollection",
-			1,
 		)
-		executeScriptAndCheck(t, b, script, nil)
 
-		script = templates.GenerateInspectNFTSupplyScript(nftAddr, tokenAddr, "RoxItems", 1)
-		executeScriptAndCheck(t, b, script, nil)
+		result = executeScriptAndCheck(t, b, script, [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		assert.Equal(t, cadence.NewInt(1), result)
+
+		//	script = templates.GenerateInspectNFTSupplyScript(nftAddr, tokenAddr, "RoxItems", 1)
+		//	executeScriptAndCheck(t, b, script, nil)
 	})
 
 	t.Run("Shouldn't be able to borrow a reference to an NFT that doesn't exist", func(t *testing.T) {
@@ -257,10 +259,10 @@ func TestTransferNFT(t *testing.T) {
 			joshAddress,
 			"RoxItems",
 			"RoxItemsCollection",
-			0,
 		)
-		executeScriptAndCheck(t, b, script, nil)
 
+		result := executeScriptAndCheck(t, b, script, [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		assert.Equal(t, cadence.NewInt(0), result)
 	})
 
 	t.Run("Shouldn't be able to withdraw an NFT that doesn't exist in a collection", func(t *testing.T) {
@@ -295,9 +297,10 @@ func TestTransferNFT(t *testing.T) {
 			joshAddress,
 			"RoxItems",
 			"RoxItemsCollection",
-			0,
 		)
-		executeScriptAndCheck(t, b, script, nil)
+
+		result := executeScriptAndCheck(t, b, script, [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		assert.Equal(t, cadence.NewInt(0), result)
 
 		// Assert that the account's collection is correct
 		script = templates.GenerateInspectCollectionLenScript(
@@ -306,9 +309,10 @@ func TestTransferNFT(t *testing.T) {
 			tokenAddr,
 			"RoxItems",
 			"RoxItemsCollection",
-			1,
 		)
-		executeScriptAndCheck(t, b, script, nil)
+
+		result = executeScriptAndCheck(t, b, script, [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		assert.Equal(t, cadence.NewInt(1), result)
 
 	})
 
@@ -355,9 +359,10 @@ func TestTransferNFT(t *testing.T) {
 			joshAddress,
 			"RoxItems",
 			"RoxItemsCollection",
-			1,
 		)
-		executeScriptAndCheck(t, b, script, nil)
+
+		result := executeScriptAndCheck(t, b, script, [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		assert.Equal(t, cadence.NewInt(1), result)
 
 		// Assert that the account's collection is correct
 		script = templates.GenerateInspectCollectionLenScript(
@@ -366,9 +371,10 @@ func TestTransferNFT(t *testing.T) {
 			tokenAddr,
 			"RoxItems",
 			"RoxItemsCollection",
-			0,
 		)
-		executeScriptAndCheck(t, b, script, nil)
+
+		result = executeScriptAndCheck(t, b, script, [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		assert.Equal(t, cadence.NewInt(0), result)
 
 	})
 
@@ -403,9 +409,10 @@ func TestTransferNFT(t *testing.T) {
 			joshAddress,
 			"RoxItems",
 			"RoxItemsCollection",
-			0,
 		)
-		executeScriptAndCheck(t, b, script, nil)
+
+		result := executeScriptAndCheck(t, b, script, [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		assert.Equal(t, cadence.NewInt(0), result)
 
 		// Assert that the account's collection is correct
 		script = templates.GenerateInspectCollectionLenScript(
@@ -414,17 +421,18 @@ func TestTransferNFT(t *testing.T) {
 			tokenAddr,
 			"RoxItems",
 			"RoxItemsCollection",
-			0,
 		)
-		executeScriptAndCheck(t, b, script, nil)
 
-		script = templates.GenerateInspectNFTSupplyScript(
-			nftAddr,
-			tokenAddr,
-			"RoxItems",
-			1,
-		)
-		executeScriptAndCheck(t, b, script, nil)
+		result = executeScriptAndCheck(t, b, script, [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		assert.Equal(t, cadence.NewInt(0), result)
+
+		/*	script = templates.GenerateInspectNFTSupplyScript(
+				nftAddr,
+				tokenAddr,
+				"RoxItems",
+				1,
+			)
+			executeScriptAndCheck(t, b, script, nil) */
 
 	})
 }

@@ -1,15 +1,17 @@
 package templates
 
-//go:generate go-bindata -prefix ../../../scripts -o internal/assets/assets.go -pkg assets -nometadata -nomemcopy ../../../scripts
-
 import (
 	"fmt"
+	"strings"
 
 	"github.com/onflow/flow-go-sdk"
+
+	"github.com/onflow/flow-nft/lib/go/templates/internal/assets"
 )
 
 const (
-	readDataFilename = "read_nft_id.cdc"
+	roxItemsTotalSupplyFileName = "scripts/rox_items_total_supply.cdc"
+	nftCollectionLengthFileName = "scripts/nft_collection_length.cdc"
 )
 
 // GenerateInspectCollectionScript creates a script that retrieves an NFT collection
@@ -35,40 +37,59 @@ func GenerateInspectCollectionScript(nftAddr, tokenAddr, userAddr flow.Address, 
 // GenerateInspectCollectionLenScript creates a script that retrieves an NFT collection
 // from storage and tries to borrow a reference for an NFT that it owns.
 // If it owns it, it will not fail.
-func GenerateInspectCollectionLenScript(nftAddr, tokenAddr, userAddr flow.Address, tokenContractName, storageLocation string, length int) []byte {
-	template := `
-		import NonFungibleToken from 0x%s
-		import %s from 0x%s
+func GenerateInspectCollectionLenScript(nftAddr, tokenAddr, userAddr flow.Address, tokenContractName, storageLocation string) []byte {
+	code := assets.MustAssetString(nftCollectionLengthFileName)
 
-		pub fun main() {
-			let acct = getAccount(0x%s)
-			let collectionRef = acct.getCapability(/public/%s)!.borrow<&{NonFungibleToken.CollectionPublic}>()
-				?? panic("Could not borrow capability from public wow collection")
-			
-			if %d != collectionRef.getIDs().length {
-				panic("Collection Length is not correct")
-			}
-		}
-	`
+	code = strings.ReplaceAll(
+		code,
+		"0x"+defaultNFTAddress,
+		"0x"+nftAddr.String(),
+	)
+	code = strings.ReplaceAll(
+		code,
+		"0x"+defaultContractAddress,
+		"0x"+tokenAddr.String(),
+	)
+	code = strings.ReplaceAll(
+		code,
+		"0x"+defaultNFTName,
+		"0x"+tokenContractName,
+	)
+	code = strings.ReplaceAll(
+		code,
+		"0x"+defaultNFTStorage,
+		"0x"+"TODO",
+	)
 
-	return []byte(fmt.Sprintf(template, nftAddr, tokenContractName, tokenAddr, userAddr, storageLocation, length))
+	return []byte(code)
 }
 
 // GenerateInspectNFTSupplyScript creates a script that reads
 // the total supply of tokens in existence
 // and makes assertions about the number
-func GenerateInspectNFTSupplyScript(nftAddr, tokenAddr flow.Address, tokenContractName string, expectedSupply int) []byte {
-	template := `
-		import NonFungibleToken from 0x%s
-		import %s from 0x%s
+func GenerateInspectNFTSupplyScript(nftAddr, tokenAddr flow.Address, tokenContractName string) []byte {
+	code := assets.MustAssetString(roxItemsTotalSupplyFileName)
 
-		pub fun main() {
-			assert(
-                %s.totalSupply == UInt64(%d),
-                message: "incorrect totalSupply!"
-            )
-		}
-	`
+	code = strings.ReplaceAll(
+		code,
+		"0x"+defaultNFTAddress,
+		"0x"+nftAddr.String(),
+	)
+	code = strings.ReplaceAll(
+		code,
+		"0x"+defaultContractAddress,
+		"0x"+tokenAddr.String(),
+	)
+	code = strings.ReplaceAll(
+		code,
+		"0x"+defaultNFTName,
+		"0x"+tokenContractName,
+	)
+	code = strings.ReplaceAll(
+		code,
+		"0x"+defaultNFTStorage,
+		"0x"+"TODO",
+	)
 
-	return []byte(fmt.Sprintf(template, nftAddr, tokenContractName, tokenAddr, tokenContractName, expectedSupply))
+	return []byte(code)
 }

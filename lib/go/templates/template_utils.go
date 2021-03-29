@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-//go:generate go-bindata -prefix ../../../transactions/... -o internal/assets/assets.go -pkg assets -nometadata -nomemcopy ../../../transactions/...
+// xx go-bindata -prefix ../../../transactions/... -o internal/assets/assets.go -pkg assets -nometadata -nomemcopy ../../../transactions/...
 
 const (
 	placeholderFungibleTokenAddress = "0xFUNGIBLETOKENADDRESS"
