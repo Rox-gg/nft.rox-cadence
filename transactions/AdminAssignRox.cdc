@@ -1,7 +1,7 @@
 import NonFungibleToken from 0xNFTADDRESS
 import RoxItems from 0xNFTCONTRACTADDRESS
 
-transaction(recipient: Address, typeID: UInt64) {
+transaction(recipient: Address, collectibleId: String, tier: String, mintNumber : UInt64) {
     
     let minter: &RoxItems.NFTMinter
 
@@ -19,6 +19,6 @@ transaction(recipient: Address, typeID: UInt64) {
             .borrow<&{NonFungibleToken.CollectionPublic}>()
             ?? panic("Could not get receiver reference to the NFT Collection")
 
-        self.minter.mintNFT(recipient: receiver, typeID: typeID)
+        self.minter.mintNFT(recipient: receiver, collectibleId: collectibleId, tier: tier, mintNumber: mintNumber)
     }
 }

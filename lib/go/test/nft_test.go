@@ -3,6 +3,7 @@ package test
 import (
 	"testing"
 
+	"github.com/onflow/cadence"
 	"github.com/onflow/flow-go-sdk"
 	"github.com/onflow/flow-go-sdk/crypto"
 	sdktemplates "github.com/onflow/flow-go-sdk/templates"
@@ -12,6 +13,7 @@ import (
 	"github.com/onflow/flow-nft/lib/go/templates"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestRoxItemsDeployment(t *testing.T) {
@@ -97,8 +99,13 @@ func TestCreateNFT(t *testing.T) {
 
 	t.Run("Should be able to mint a token", func(t *testing.T) {
 
-		script := templates.GenerateMintNFTTransaction(nftAddr, tokenAddr, tokenAddr)
+		script := templates.GenerateMintNFTTransaction(nftAddr.String(), tokenAddr.String(), tokenAddr.String(), "RoxItemsCollection")
 		tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
+
+		_ = tx.AddArgument(cadence.NewAddress(tokenAddr)) // Now it transfers to same minter account
+		_ = tx.AddArgument(cadence.NewString("1"))
+		_ = tx.AddArgument(cadence.NewString("1"))
+		_ = tx.AddArgument(cadence.NewUInt64(1))
 
 		signAndSubmit(
 			t, b, tx,
@@ -137,23 +144,22 @@ func TestCreateNFT(t *testing.T) {
 		script = templates.GenerateInspectNFTSupplyScript(nftAddr, tokenAddr, "RoxItems", 1)
 		executeScriptAndCheck(t, b, script, nil)
 	})
-	/*
-		t.Run("Shouldn't be able to borrow a reference to an NFT that doesn't exist", func(t *testing.T) {
 
-			// Assert that the account's collection is correct
-			script := templates.GenerateInspectCollectionScript(
-				nftAddr,
-				tokenAddr,
-				tokenAddr,
-				"ExampleNFT",
-				"NFTCollection",
-				5,
-			)
-			result, err := b.ExecuteScript(script, nil)
-			require.NoError(t, err)
-			assert.True(t, result.Reverted())
-		}) */
+	t.Run("Shouldn't be able to borrow a reference to an NFT that doesn't exist", func(t *testing.T) {
 
+		// Assert that the account's collection is correct
+		script := templates.GenerateInspectCollectionScript(
+			nftAddr,
+			tokenAddr,
+			tokenAddr,
+			"RoxItems",
+			"RoxItemsCollection",
+			5,
+		)
+		result, err := b.ExecuteScript(script, nil)
+		require.NoError(t, err)
+		assert.True(t, result.Reverted())
+	})
 }
 
 /*
