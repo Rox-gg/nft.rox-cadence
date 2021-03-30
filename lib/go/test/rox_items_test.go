@@ -90,10 +90,10 @@ func TestCreateNFT(t *testing.T) {
 
 	env.ContractAddress = tokenAddr.String()
 
-	result := executeScriptAndCheck(t, b, templates.GenerateInspectNFTSupplyScript(env), nil)
+	result := executeScriptAndCheck(t, b, templates.GenerateRoxItemsTotalSupplyScript(env), nil)
 	assert.Equal(t, cadence.NewUInt64(0), result)
 
-	result = executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+	result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 	assert.Equal(t, cadence.NewInt(0), result)
 
 	t.Run("Should be able to mint a token", func(t *testing.T) {
@@ -121,14 +121,14 @@ func TestCreateNFT(t *testing.T) {
 
 		// Assert that the account's collection is correct
 		result = executeScriptAndCheck(t, b,
-			templates.GenerateInspectCollectionScript(env),
+			templates.GenerateBorrowNftScript(env),
 			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(0))})
 		assert.Equal(t, cadence.NewUInt64(0), result)
 
-		result = executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(1), result)
 
-		executeScriptAndCheck(t, b, templates.GenerateInspectNFTSupplyScript(env), nil)
+		executeScriptAndCheck(t, b, templates.GenerateRoxItemsTotalSupplyScript(env), nil)
 		assert.Equal(t, cadence.NewInt(1), result)
 	})
 
@@ -136,7 +136,7 @@ func TestCreateNFT(t *testing.T) {
 
 		// Assert that the account's collection is correct
 		result, err := b.ExecuteScript(
-			templates.GenerateInspectCollectionScript(env),
+			templates.GenerateBorrowNftScript(env),
 			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(5))})
 		require.NoError(t, err)
 		assert.True(t, result.Reverted())
@@ -232,7 +232,7 @@ func TestTransferNFT(t *testing.T) {
 			false,
 		)
 
-		result := executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		result := executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
 		assert.Equal(t, cadence.NewInt(0), result)
 	})
 
@@ -257,11 +257,11 @@ func TestTransferNFT(t *testing.T) {
 			true,
 		)
 
-		result := executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		result := executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
 		assert.Equal(t, cadence.NewInt(0), result)
 
 		// Assert that the account's collection is correct
-		result = executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(1), result)
 
 	})
@@ -289,15 +289,15 @@ func TestTransferNFT(t *testing.T) {
 
 		// Assert that the account's collection is correct
 		result := executeScriptAndCheck(t, b,
-			templates.GenerateInspectCollectionScript(env),
+			templates.GenerateBorrowNftScript(env),
 			[][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress)), jsoncdc.MustEncode(cadence.UInt64(0))})
 		assert.Equal(t, cadence.NewUInt64(0), result)
 
-		result = executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
 		assert.Equal(t, cadence.NewInt(1), result)
 
 		// Assert that the account's collection is correct
-		result = executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(0), result)
 	})
 
@@ -321,14 +321,14 @@ func TestTransferNFT(t *testing.T) {
 			false,
 		)
 
-		result := executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		result := executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
 		assert.Equal(t, cadence.NewInt(0), result)
 
 		// Assert that the account's collection is correct
-		result = executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(0), result)
 
-		result = executeScriptAndCheck(t, b, templates.GenerateInspectNFTSupplyScript(env), nil)
+		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsTotalSupplyScript(env), nil)
 		assert.Equal(t, cadence.NewUInt64(1), result)
 	})
 }

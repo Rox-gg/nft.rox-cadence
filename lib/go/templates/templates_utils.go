@@ -1,5 +1,7 @@
 package templates
 
+//go:generate go-bindata -prefix ../../../templates/... -o internal/assets/assets.go -pkg assets -nometadata -nomemcopy ../../../templates/...
+
 import (
 	"fmt"
 	"strings"

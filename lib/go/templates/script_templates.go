@@ -7,31 +7,22 @@ import (
 const (
 	roxItemsTotalSupplyFileName = "scripts/rox_items_total_supply.cdc"
 	nftCollectionLengthFileName = "scripts/nft_collection_length.cdc"
-	borrowNftFileName           = "scripts/read_nft_id.cdc"
+	borrowNftFileName           = "scripts/borrow_nft.cdc"
 )
 
-// GenerateInspectCollectionScript creates a script that retrieves an NFT collection
-// from storage and tries to borrow a reference for an NFT that it owns.
-// If it owns it, it will not fail.
-func GenerateInspectCollectionScript(env Environment) []byte {
+func GenerateBorrowNftScript(env Environment) []byte {
 	code := assets.MustAssetString(borrowNftFileName)
 
 	return []byte(replaceAddresses(code, env))
 }
 
-// GenerateInspectCollectionLenScript creates a script that retrieves an NFT collection
-// from storage and tries to borrow a reference for an NFT that it owns.
-// If it owns it, it will not fail.
-func GenerateInspectCollectionLenScript(env Environment) []byte {
+func GenerateRoxItemsCollectionLengthScript(env Environment) []byte {
 	code := assets.MustAssetString(nftCollectionLengthFileName)
 
 	return []byte(replaceAddresses(code, env))
 }
 
-// GenerateInspectNFTSupplyScript creates a script that reads
-// the total supply of tokens in existence
-// and makes assertions about the number
-func GenerateInspectNFTSupplyScript(env Environment) []byte {
+func GenerateRoxItemsTotalSupplyScript(env Environment) []byte {
 	code := assets.MustAssetString(roxItemsTotalSupplyFileName)
 
 	return []byte(replaceAddresses(code, env))
