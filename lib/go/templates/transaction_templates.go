@@ -10,7 +10,6 @@ import (
 )
 
 const (
-	transactionsPath         = "../../../templates/"
 	createCollectionFilename = "transactions/SetupUser.cdc"
 	adminAssignRoxFilename   = "transactions/AdminAssignRox.cdc"
 	transferRoxFilename      = "transactions/TransferRox.cdc"

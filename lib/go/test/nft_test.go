@@ -120,15 +120,10 @@ func TestCreateNFT(t *testing.T) {
 		)
 
 		// Assert that the account's collection is correct
-		script = templates.GenerateInspectCollectionScript(
-			nftAddr,
-			tokenAddr,
-			tokenAddr,
-			"RoxItems",
-			"RoxItemsCollection",
-			0,
-		)
-		executeScriptAndCheck(t, b, script, nil)
+		result = executeScriptAndCheck(t, b,
+			templates.GenerateInspectCollectionScript(env),
+			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(0))})
+		assert.Equal(t, cadence.NewUInt64(0), result)
 
 		result = executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(1), result)
@@ -140,15 +135,9 @@ func TestCreateNFT(t *testing.T) {
 	t.Run("Shouldn't be able to borrow a reference to an NFT that doesn't exist", func(t *testing.T) {
 
 		// Assert that the account's collection is correct
-		script := templates.GenerateInspectCollectionScript(
-			nftAddr,
-			tokenAddr,
-			tokenAddr,
-			"RoxItems",
-			"RoxItemsCollection",
-			5,
-		)
-		result, err := b.ExecuteScript(script, nil)
+		result, err := b.ExecuteScript(
+			templates.GenerateInspectCollectionScript(env),
+			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(5))})
 		require.NoError(t, err)
 		assert.True(t, result.Reverted())
 	})

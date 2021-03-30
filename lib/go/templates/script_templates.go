@@ -1,36 +1,22 @@
 package templates
 
 import (
-	"fmt"
-
-	"github.com/onflow/flow-go-sdk"
-
 	"github.com/onflow/flow-nft/lib/go/templates/internal/assets"
 )
 
 const (
 	roxItemsTotalSupplyFileName = "scripts/rox_items_total_supply.cdc"
 	nftCollectionLengthFileName = "scripts/nft_collection_length.cdc"
+	borrowNftFileName           = "scripts/read_nft_id.cdc"
 )
 
 // GenerateInspectCollectionScript creates a script that retrieves an NFT collection
 // from storage and tries to borrow a reference for an NFT that it owns.
 // If it owns it, it will not fail.
-func GenerateInspectCollectionScript(nftAddr, tokenAddr, userAddr flow.Address, tokenContractName, storageLocation string, nftID int) []byte {
-	template := `
-		import NonFungibleToken from 0x%s
-		import %s from 0x%s
+func GenerateInspectCollectionScript(env Environment) []byte {
+	code := assets.MustAssetString(borrowNftFileName)
 
-		pub fun main() {
-			let acct = getAccount(0x%s)
-			let collectionRef = acct.getCapability(/public/%s)!.borrow<&{NonFungibleToken.CollectionPublic}>()
-				?? panic("Could not borrow capability from public collection")
-			
-			let tokenRef = collectionRef.borrowNFT(id: UInt64(%d))
-		}
-	`
-
-	return []byte(fmt.Sprintf(template, nftAddr, tokenContractName, tokenAddr, userAddr, storageLocation, nftID))
+	return []byte(replaceAddresses(code, env))
 }
 
 // GenerateInspectCollectionLenScript creates a script that retrieves an NFT collection
