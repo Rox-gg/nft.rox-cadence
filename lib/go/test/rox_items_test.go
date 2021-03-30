@@ -1,5 +1,17 @@
 package test
 
+//These package tests the following scenarios:
+// TestRoxItemsDeployment - the deployment of contracts
+// TestCreateNFT - RoxItem creation
+//		* minting a new RoxItem
+//		* borrowing unexisting RoxItem fails
+// TestTransferNFT - transfers RoxItem from one account to another
+//		* minting a new RoxItem
+//		* setuping new collection in new account
+//		* withdrawing unexisting RoxItem fails
+//		* transfering RoxItem from one account to another
+//		* destroying RoxItem
+
 import (
 	"testing"
 
@@ -183,9 +195,8 @@ func TestTransferNFT(t *testing.T) {
 	joshAccountKey, joshSigner := accountKeys.NewWithSigner()
 	joshAddress, err := b.CreateAccount([]*flow.AccountKey{joshAccountKey}, nil)
 
-	script := templates.GenerateMintNFTTransaction(env)
 	tx := flow.NewTransaction().
-		SetScript(script).
+		SetScript(templates.GenerateMintNFTTransaction(env)).
 		SetGasLimit(100).
 		SetProposalKey(
 			b.ServiceKey().Address,
@@ -242,7 +253,7 @@ func TestTransferNFT(t *testing.T) {
 		tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
 
 		_ = tx.AddArgument(cadence.NewAddress(joshAddress))
-		_ = tx.AddArgument(cadence.NewString("3"))
+		_ = tx.AddArgument(cadence.NewUInt64(3))
 
 		signAndSubmit(
 			t, b, tx,

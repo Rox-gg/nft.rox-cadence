@@ -5,17 +5,17 @@ import (
 )
 
 const (
-	createCollectionFilename = "transactions/SetupUser.cdc"
-	adminAssignRoxFilename   = "transactions/AdminAssignRox.cdc"
-	transferRoxFilename      = "transactions/TransferRox.cdc"
-	destroyRoxFilename       = "transactions/DestroyRox.cdc"
+	setupUserFilename      = "transactions/SetupUser.cdc"
+	adminAssignRoxFilename = "transactions/AdminAssignRox.cdc"
+	transferRoxFilename    = "transactions/TransferRox.cdc"
+	destroyRoxFilename     = "transactions/DestroyRox.cdc"
 )
 
 // GenerateCreateCollectionScript Creates a script that instantiates a new
 // NFT collection instance, stores the collection in memory, then stores a
 // reference to the collection.
 func GenerateCreateCollectionScript(env Environment) []byte {
-	code := assets.MustAssetString(createCollectionFilename)
+	code := assets.MustAssetString(setupUserFilename)
 
 	return []byte(replaceAddresses(code, env))
 }
