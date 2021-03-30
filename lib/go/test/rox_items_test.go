@@ -301,7 +301,7 @@ func TestTransferNFT(t *testing.T) {
 		assert.Equal(t, cadence.NewInt(0), result)
 	})
 
-	// transfer an NFT
+	// destroy NFT
 	t.Run("Should be able to withdraw an NFT and destroy it, not reducing the supply", func(t *testing.T) {
 
 		tx := createTxWithTemplateAndAuthorizer(b, templates.GenerateDestroyScript(env), joshAddress)
