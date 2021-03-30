@@ -304,14 +304,9 @@ func TestTransferNFT(t *testing.T) {
 	// transfer an NFT
 	t.Run("Should be able to withdraw an NFT and destroy it, not reducing the supply", func(t *testing.T) {
 
-		script := templates.GenerateDestroyScript(
-			nftAddr,
-			tokenAddr,
-			"RoxItems",
-			"RoxItemsCollection",
-			0,
-		)
-		tx := createTxWithTemplateAndAuthorizer(b, script, joshAddress)
+		tx := createTxWithTemplateAndAuthorizer(b, templates.GenerateDestroyScript(env), joshAddress)
+
+		_ = tx.AddArgument(cadence.NewUInt64(0))
 
 		signAndSubmit(
 			t, b, tx,

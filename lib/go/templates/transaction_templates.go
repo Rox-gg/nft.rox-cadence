@@ -3,9 +3,6 @@ package templates
 //go:generate go-bindata -prefix ../../../templates/... -o internal/assets/assets.go -pkg assets -nometadata -nomemcopy ../../../templates/...
 
 import (
-	"fmt"
-
-	"github.com/onflow/flow-go-sdk"
 	"github.com/onflow/flow-nft/lib/go/templates/internal/assets"
 )
 
@@ -13,6 +10,7 @@ const (
 	createCollectionFilename = "transactions/SetupUser.cdc"
 	adminAssignRoxFilename   = "transactions/AdminAssignRox.cdc"
 	transferRoxFilename      = "transactions/TransferRox.cdc"
+	destroyRoxFilename       = "transactions/DestroyRox.cdc"
 )
 
 // GenerateCreateCollectionScript Creates a script that instantiates a new
@@ -42,23 +40,8 @@ func GenerateTransferScript(env Environment) []byte {
 
 // GenerateDestroyScript creates a script that withdraws an NFT token
 // from a collection and destroys it
-func GenerateDestroyScript(nftAddr, tokenAddr flow.Address, tokenContractName, storageLocation string, destroyNFTID int) []byte {
-	template := `
-		import NonFungibleToken from 0x%s
-		import %s from 0x%s
+func GenerateDestroyScript(env Environment) []byte {
+	code := assets.MustAssetString(destroyRoxFilename)
 
-		transaction {
-		  prepare(acct: AuthAccount) {
-
-			let collection <- acct.load<@%s.CollectionPrivate>(from:/storage/%s)!
-
-			let nft <- collection.withdraw(withdrawID: %d)
-
-			destroy nft
-
-			acct.save(<-collection, to: /storage/%s)
-		  }
-		}
-	`
-	return []byte(fmt.Sprintf(template, nftAddr, tokenContractName, tokenAddr.String(), tokenContractName, storageLocation, destroyNFTID, storageLocation))
+	return []byte(replaceAddresses(code, env))
 }
