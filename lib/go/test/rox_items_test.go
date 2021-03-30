@@ -330,13 +330,7 @@ func TestTransferNFT(t *testing.T) {
 		result = executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(0), result)
 
-		/*	script = templates.GenerateInspectNFTSupplyScript(
-				nftAddr,
-				tokenAddr,
-				"RoxItems",
-				1,
-			)
-			executeScriptAndCheck(t, b, script, nil) */
-
+		result = executeScriptAndCheck(t, b, templates.GenerateInspectNFTSupplyScript(env), nil)
+		assert.Equal(t, cadence.NewUInt64(1), result)
 	})
 }
