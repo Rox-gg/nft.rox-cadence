@@ -288,9 +288,12 @@ func TestTransferNFT(t *testing.T) {
 		)
 
 		// Assert that the account's collection is correct
-		//script = templates.GenerateInspectCollectionScript(env)
-		//executeScriptAndCheck(t, b, script, nil)
-		result := executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		result := executeScriptAndCheck(t, b,
+			templates.GenerateInspectCollectionScript(env),
+			[][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress)), jsoncdc.MustEncode(cadence.UInt64(0))})
+		assert.Equal(t, cadence.NewUInt64(0), result)
+
+		result = executeScriptAndCheck(t, b, templates.GenerateInspectCollectionLenScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
 		assert.Equal(t, cadence.NewInt(1), result)
 
 		// Assert that the account's collection is correct
