@@ -7,7 +7,7 @@
 	},
 	"contracts": {
 		"NonFungibleToken": "./contracts/NonFungibleToken.cdc",
-		"RoxItems": "./contracts/RoxItems.cdc"
+		"RoxContract": "./contracts/RoxContract.cdc"
 	},
 	"networks": {
 		"emulator": {
@@ -25,8 +25,8 @@
 	"deployments": {
 		"emulator":{
 			"emulator-account": [
-				"RoxItems",
-				"NonFungibleToken"
+				"NonFungibleToken",
+				"RoxContract"
 			]
 		}
 	}

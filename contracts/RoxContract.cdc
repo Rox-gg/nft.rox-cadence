@@ -1,4 +1,4 @@
-import NonFungibleToken from 0x02
+import NonFungibleToken from "NonFungibleToken.cdc"
 
 pub contract RoxContract: NonFungibleToken {
 
