@@ -15,17 +15,18 @@ pub contract RoxContract: NonFungibleToken {
 
     // The total number of NFT that have been minted
     pub var totalSupply: UInt64
+    pub var numberMintedPerCollectible: {String: UInt32}
 
     // NFT
     // A Rox Item as an NFT
     pub resource NFT: NonFungibleToken.INFT {
         // The token's ID
         pub let id: UInt64
-        pub let tier: String // Tier name
+        pub let tier: String // enum in BE
         pub let collectibleId: String
-        pub let mintNumber: UInt64
+        pub let mintNumber: UInt32 // Don't know what it is
 
-        init(initID: UInt64, collectibleId: String, tier: String, mintNumber: UInt64) {
+        init(initID: UInt64, collectibleId: String, tier: String, mintNumber: UInt32) {
             self.id = initID
             self.collectibleId = collectibleId
             self.tier = tier
@@ -47,6 +48,7 @@ pub contract RoxContract: NonFungibleToken {
         }
     }
 
+
     pub resource Collection: CollectionRoxPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic {
 
         pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
@@ -67,10 +69,9 @@ pub contract RoxContract: NonFungibleToken {
             // add the new token to the dictionary which removes the old one
             let oldToken <- self.ownedNFTs[id] <- token
 
-            if (oldToken != nil)
-                panic("how is this even possible?")
-
             emit Deposit(id: id, to: self.owner?.address)
+
+            destroy oldToken
         }
 
         pub fun getIDs(): [UInt64] {
@@ -112,14 +113,21 @@ pub contract RoxContract: NonFungibleToken {
 
 	pub resource NFTMinter {
 
-		pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}, collectibleId: String, tier: String, mintNumber : UInt64) {
+		pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}, collectibleId: String, tier: String) {
 
             emit Minted(id: RoxContract.totalSupply, collectibleId: collectibleId)
 
+            var numberPerCollectible = RoxContract.numberMintedPerCollectible[collectibleId]
+            if (numberPerCollectible == nil){
+                numberPerCollectible = 0
+                RoxContract.numberMintedPerCollectible[collectibleId] = numberPerCollectible
+            }
+
             // deposit it in the recipient's account using their reference
-            recipient.deposit(token: <-create RoxContract.NFT(initID: RoxContract.totalSupply, collectibleId: collectibleId, tier: tier, mintNumber: mintNumber))
+            recipient.deposit(token: <-create RoxContract.NFT(initID: RoxContract.totalSupply, collectibleId: collectibleId, tier: tier, mintNumber: numberPerCollectible!))
 
             RoxContract.totalSupply = RoxContract.totalSupply + (1 as UInt64)
+            RoxContract.numberMintedPerCollectible[collectibleId] = numberPerCollectible! + (1 as UInt32)
 		}
 	}
 
@@ -145,6 +153,7 @@ pub contract RoxContract: NonFungibleToken {
         self.MinterStoragePath = /storage/RoxMinter
 
         self.totalSupply = 0
+        self.numberMintedPerCollectible = {}
 
         let minter <- create NFTMinter()
         self.account.save(<-minter, to: self.MinterStoragePath)
@@ -156,4 +165,5 @@ pub contract RoxContract: NonFungibleToken {
         emit ContractInitialized()
 	}
 }
+ 
  

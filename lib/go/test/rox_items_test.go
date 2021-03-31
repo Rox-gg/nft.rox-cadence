@@ -116,7 +116,6 @@ func TestCreateNFT(t *testing.T) {
 		_ = tx.AddArgument(cadence.NewAddress(tokenAddr)) // Now it transfers to same minter account
 		_ = tx.AddArgument(cadence.NewString("1"))
 		_ = tx.AddArgument(cadence.NewString("1"))
-		_ = tx.AddArgument(cadence.NewUInt64(1))
 
 		signAndSubmit(
 			t, b, tx,
@@ -209,7 +208,6 @@ func TestTransferNFT(t *testing.T) {
 	_ = tx.AddArgument(cadence.NewAddress(tokenAddr)) // Now it transfers to same minter account
 	_ = tx.AddArgument(cadence.NewString("1"))
 	_ = tx.AddArgument(cadence.NewString("1"))
-	_ = tx.AddArgument(cadence.NewUInt64(1))
 
 	signAndSubmit(
 		t, b, tx,
