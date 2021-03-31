@@ -1,13 +1,13 @@
 import NonFungibleToken from 0xNFTADDRESS
-import RoxItems from 0xNFTCONTRACTADDRESS
+import RoxContract from 0xNFTCONTRACTADDRESS
 
 transaction(recipient: Address, collectibleId: String, tier: String, mintNumber : UInt64) {
     
-    let minter: &RoxItems.NFTMinter
+    let minter: &RoxContract.NFTMinter
 
     prepare(adminAcc: AuthAccount) {
 
-        self.minter = adminAcc.borrow<&RoxItems.NFTMinter>(from: RoxItems.MinterStoragePath)
+        self.minter = adminAcc.borrow<&RoxContract.NFTMinter>(from: RoxContract.MinterStoragePath)
             ?? panic("Could not borrow a reference to the NFT minter")
     }
 
@@ -15,7 +15,7 @@ transaction(recipient: Address, collectibleId: String, tier: String, mintNumber 
         let recipient = getAccount(recipient)
 
         let receiver = recipient
-            .getCapability(RoxItems.CollectionPublicPath)
+            .getCapability(RoxContract.CollectionPublicPath)
             .borrow<&{NonFungibleToken.CollectionPublic}>()
             ?? panic("Could not get receiver reference to the NFT Collection")
 

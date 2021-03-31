@@ -1,5 +1,5 @@
 import NonFungibleToken from 0xNFTADDRESS
-import RoxItems from 0xNFTCONTRACTADDRESS
+import RoxContract from 0xNFTCONTRACTADDRESS
 
 transaction(recipient: Address, withdrawID: UInt64) {
 
@@ -7,7 +7,7 @@ transaction(recipient: Address, withdrawID: UInt64) {
 
     prepare(signer: AuthAccount) {
 
-        let collectionRef = signer.borrow<&RoxItems.CollectionPrivate>(from: RoxItems.CollectionStoragePath)
+        let collectionRef = signer.borrow<&RoxContract.Collection>(from: RoxContract.CollectionStoragePath)
             ?? panic("Could not borrow a reference to the owner's collection")
 
         self.tempNFT <- collectionRef.withdraw(withdrawID: withdrawID)
@@ -16,7 +16,7 @@ transaction(recipient: Address, withdrawID: UInt64) {
 
         let recipient = getAccount(recipient)
 
-        let depositRef = recipient.getCapability(RoxItems.CollectionPublicPath)!.borrow<&{NonFungibleToken.CollectionPublic}>()!
+        let depositRef = recipient.getCapability(RoxContract.CollectionPublicPath)!.borrow<&{NonFungibleToken.CollectionPublic}>()!
 
         depositRef.deposit(token: <- self.tempNFT)
 

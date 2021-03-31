@@ -10,7 +10,7 @@ import (
 
 const (
 	nonfungibleTokenFilename       = "NonFungibleToken.cdc"
-	roxItemsFilename               = "RoxItems.cdc"
+	roxContractFilename            = "RoxContract.cdc"
 	defaultNonFungibleTokenAddress = "02"
 )
 
@@ -20,8 +20,8 @@ func NonFungibleToken() []byte {
 }
 
 // The returned contract will import the NonFungibleToken contract from the specified address.
-func RoxItems(nonfungibleTokenAddr string) []byte {
-	code := assets.MustAssetString(roxItemsFilename)
+func RoxContract(nonfungibleTokenAddr string) []byte {
+	code := assets.MustAssetString(roxContractFilename)
 
 	code = strings.ReplaceAll(
 		code,

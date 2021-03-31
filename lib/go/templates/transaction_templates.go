@@ -5,10 +5,10 @@ import (
 )
 
 const (
-	setupUserFilename      = "transactions/SetupUser.cdc"
-	adminAssignRoxFilename = "transactions/AdminAssignRox.cdc"
-	transferRoxFilename    = "transactions/TransferRox.cdc"
-	destroyRoxFilename     = "transactions/DestroyRox.cdc"
+	setupUserFilename      = "transactions/setupUser.cdc"
+	adminAssignRoxFilename = "transactions/adminMintRox.cdc"
+	transferRoxFilename    = "transactions/transferRox.cdc"
+	destroyRoxFilename     = "transactions/destroyRox.cdc"
 )
 
 // GenerateCreateCollectionScript Creates a script that instantiates a new

@@ -16,7 +16,7 @@ func TestNonFungibleTokenContract(t *testing.T) {
 }
 
 func TestRoxItemsContract(t *testing.T) {
-	contract := contracts.RoxItems(addrA)
+	contract := contracts.RoxContract(addrA)
 	assert.NotNil(t, contract)
 	assert.Contains(t, string(contract), addrA)
 }

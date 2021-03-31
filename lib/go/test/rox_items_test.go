@@ -29,7 +29,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestRoxItemsDeployment(t *testing.T) {
+func TestRoxContractDeployment(t *testing.T) {
 	b := newBlockchain()
 
 	// Should be able to deploy a contract as a new account with no keys.
@@ -49,12 +49,12 @@ func TestRoxItemsDeployment(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Should be able to deploy a contract as a new account with no keys.
-	tokenCode := contracts.RoxItems(nftAddr.String())
+	tokenCode := contracts.RoxContract(nftAddr.String())
 	_, err = b.CreateAccount(
 		nil,
 		[]sdktemplates.Contract{
 			{
-				Name:   "RoxItems",
+				Name:   "RoxContract",
 				Source: string(tokenCode),
 			},
 		},
@@ -88,13 +88,13 @@ func TestCreateNFT(t *testing.T) {
 	env.NonFungibleTokenAddress = nftAddr.String()
 
 	// First, deploy the contract
-	tokenCode := contracts.RoxItems(nftAddr.String())
+	tokenCode := contracts.RoxContract(nftAddr.String())
 	tokenAccountKey, tokenSigner := accountKeys.NewWithSigner()
 	tokenAddr, _ := b.CreateAccount(
 		[]*flow.AccountKey{tokenAccountKey},
 		[]sdktemplates.Contract{
 			{
-				Name:   "RoxItems",
+				Name:   "RoxContract",
 				Source: string(tokenCode),
 			},
 		},
@@ -102,10 +102,10 @@ func TestCreateNFT(t *testing.T) {
 
 	env.ContractAddress = tokenAddr.String()
 
-	result := executeScriptAndCheck(t, b, templates.GenerateRoxItemsTotalSupplyScript(env), nil)
+	result := executeScriptAndCheck(t, b, templates.GenerateTotalSupplyScript(env), nil)
 	assert.Equal(t, cadence.NewUInt64(0), result)
 
-	result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+	result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 	assert.Equal(t, cadence.NewInt(0), result)
 
 	t.Run("Should be able to mint a token", func(t *testing.T) {
@@ -137,10 +137,10 @@ func TestCreateNFT(t *testing.T) {
 			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(0))})
 		assert.Equal(t, cadence.NewUInt64(0), result)
 
-		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(1), result)
 
-		executeScriptAndCheck(t, b, templates.GenerateRoxItemsTotalSupplyScript(env), nil)
+		executeScriptAndCheck(t, b, templates.GenerateTotalSupplyScript(env), nil)
 		assert.Equal(t, cadence.NewInt(1), result)
 	})
 
@@ -174,13 +174,13 @@ func TestTransferNFT(t *testing.T) {
 	assert.NoError(t, err)
 
 	// First, deploy the contract
-	tokenCode := contracts.RoxItems(nftAddr.String())
+	tokenCode := contracts.RoxContract(nftAddr.String())
 	tokenAccountKey, tokenSigner := accountKeys.NewWithSigner()
 	tokenAddr, err := b.CreateAccount(
 		[]*flow.AccountKey{tokenAccountKey},
 		[]sdktemplates.Contract{
 			{
-				Name:   "RoxItems",
+				Name:   "RoxContract",
 				Source: string(tokenCode),
 			},
 		},
@@ -243,7 +243,7 @@ func TestTransferNFT(t *testing.T) {
 			false,
 		)
 
-		result := executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		result := executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
 		assert.Equal(t, cadence.NewInt(0), result)
 	})
 
@@ -268,11 +268,11 @@ func TestTransferNFT(t *testing.T) {
 			true,
 		)
 
-		result := executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		result := executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
 		assert.Equal(t, cadence.NewInt(0), result)
 
 		// Assert that the account's collection is correct
-		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(1), result)
 
 	})
@@ -304,11 +304,11 @@ func TestTransferNFT(t *testing.T) {
 			[][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress)), jsoncdc.MustEncode(cadence.UInt64(0))})
 		assert.Equal(t, cadence.NewUInt64(0), result)
 
-		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
 		assert.Equal(t, cadence.NewInt(1), result)
 
 		// Assert that the account's collection is correct
-		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(0), result)
 	})
 
@@ -332,14 +332,14 @@ func TestTransferNFT(t *testing.T) {
 			false,
 		)
 
-		result := executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
+		result := executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
 		assert.Equal(t, cadence.NewInt(0), result)
 
 		// Assert that the account's collection is correct
-		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(0), result)
 
-		result = executeScriptAndCheck(t, b, templates.GenerateRoxItemsTotalSupplyScript(env), nil)
+		result = executeScriptAndCheck(t, b, templates.GenerateTotalSupplyScript(env), nil)
 		assert.Equal(t, cadence.NewUInt64(1), result)
 	})
 }

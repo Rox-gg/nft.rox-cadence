@@ -1,15 +1,15 @@
 import NonFungibleToken from 0xNFTADDRESS
-import RoxItems from 0xNFTCONTRACTADDRESS
+import RoxContract from 0xNFTCONTRACTADDRESS
 
 transaction(id: UInt64) {
 	prepare(acct: AuthAccount) {
 
-		let collection <- acct.load<@RoxItems.CollectionPrivate>(from: RoxItems.CollectionStoragePath)!
+		let collection <- acct.load<@RoxContract.Collection>(from: RoxContract.CollectionStoragePath)!
 
 		let nft <- collection.withdraw(withdrawID: id)
 
 		destroy nft
 
-		acct.save(<-collection, to: RoxItems.CollectionStoragePath)
+		acct.save(<-collection, to: RoxContract.CollectionStoragePath)
 	}
 }

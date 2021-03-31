@@ -16,13 +16,13 @@ func GenerateBorrowNftScript(env Environment) []byte {
 	return []byte(replaceAddresses(code, env))
 }
 
-func GenerateRoxItemsCollectionLengthScript(env Environment) []byte {
+func GenerateCollectionLengthScript(env Environment) []byte {
 	code := assets.MustAssetString(nftCollectionLengthFileName)
 
 	return []byte(replaceAddresses(code, env))
 }
 
-func GenerateRoxItemsTotalSupplyScript(env Environment) []byte {
+func GenerateTotalSupplyScript(env Environment) []byte {
 	code := assets.MustAssetString(roxItemsTotalSupplyFileName)
 
 	return []byte(replaceAddresses(code, env))

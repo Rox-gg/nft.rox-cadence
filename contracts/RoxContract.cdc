@@ -1,9 +1,6 @@
 import NonFungibleToken from 0x02
 
-// RoxItems
-// NFT items for Rox!
-//
-pub contract RoxItems: NonFungibleToken {
+pub contract RoxContract: NonFungibleToken {
 
     // Events
     pub event ContractInitialized()
@@ -16,7 +13,7 @@ pub contract RoxItems: NonFungibleToken {
     pub let CollectionPublicPath: PublicPath
     pub let MinterStoragePath: StoragePath
 
-    // The total number of RoxItems that have been minted
+    // The total number of NFT that have been minted
     pub var totalSupply: UInt64
 
     // NFT
@@ -36,11 +33,11 @@ pub contract RoxItems: NonFungibleToken {
         }
     }
 
-    pub resource interface RoxItemsCollectionPublic {
+    pub resource interface CollectionRoxPublic {
         pub fun deposit(token: @NonFungibleToken.NFT)
         pub fun getIDs(): [UInt64]
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
-        pub fun borrowRoxItem(id: UInt64): &RoxItems.NFT? {
+        pub fun borrowRoxNft(id: UInt64): &RoxContract.NFT? {
             // If the result isn't nil, the id of the returned reference
             // should be the same as the argument to the function
             post {
@@ -51,7 +48,7 @@ pub contract RoxItems: NonFungibleToken {
     }
 
 
-    pub resource CollectionPrivate: RoxItemsCollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic {
+    pub resource Collection: CollectionRoxPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic {
 
         pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
 
@@ -64,7 +61,7 @@ pub contract RoxItems: NonFungibleToken {
         }
 
         pub fun deposit(token: @NonFungibleToken.NFT) {
-            let token <- token as! @RoxItems.NFT
+            let token <- token as! @RoxContract.NFT
 
             let id: UInt64 = token.id
 
@@ -91,10 +88,10 @@ pub contract RoxItems: NonFungibleToken {
         // Gets a reference to an NFT in the collection as a RoxItem,
         // exposing all of its fields (including the typeID).
         // This is safe as there are no functions that can be called on the RoxItem.
-        pub fun borrowRoxItem(id: UInt64): &RoxItems.NFT? {
+        pub fun borrowRoxNft(id: UInt64): &RoxContract.NFT? {
             if self.ownedNFTs[id] != nil {
                 let ref = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT
-                return ref as! &RoxItems.NFT
+                return ref as! &RoxContract.NFT
             } else {
                 return nil
             }
@@ -109,20 +106,20 @@ pub contract RoxItems: NonFungibleToken {
         }
     }
 
-    pub fun createEmptyCollection(): @NonFungibleToken.CollectionPrivate {
-        return <- create CollectionPrivate()
+    pub fun createEmptyCollection(): @NonFungibleToken.Collection {
+        return <- create Collection()
     }
 
 	pub resource NFTMinter {
 
 		pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}, collectibleId: String, tier: String, mintNumber : UInt64) {
 
-            emit Minted(id: RoxItems.totalSupply, collectibleId: collectibleId)
+            emit Minted(id: RoxContract.totalSupply, collectibleId: collectibleId)
 
             // deposit it in the recipient's account using their reference
-            recipient.deposit(token: <-create RoxItems.NFT(initID: RoxItems.totalSupply, collectibleId: collectibleId, tier: tier, mintNumber: mintNumber))
+            recipient.deposit(token: <-create RoxContract.NFT(initID: RoxContract.totalSupply, collectibleId: collectibleId, tier: tier, mintNumber: mintNumber))
 
-            RoxItems.totalSupply = RoxItems.totalSupply + (1 as UInt64)
+            RoxContract.totalSupply = RoxContract.totalSupply + (1 as UInt64)
 		}
 	}
 
@@ -132,31 +129,29 @@ pub contract RoxItems: NonFungibleToken {
     // If it has a collection but does not contain the itemId, return nil.
     // If it has a collection and that collection contains the itemId, return a reference to that.
     //
-    pub fun fetch(_ from: Address, itemID: UInt64): &RoxItems.NFT? {
+    pub fun fetch(_ from: Address, itemID: UInt64): &RoxContract.NFT? {
         let collection = getAccount(from)
-            .getCapability(RoxItems.CollectionPublicPath)
-            .borrow<&RoxItems.CollectionPrivate{RoxItems.RoxItemsCollectionPublic}>()
+            .getCapability(RoxContract.CollectionPublicPath)
+            .borrow<&RoxContract.Collection{RoxContract.CollectionRoxPublic}>()
             ?? panic("Couldn't get collection")
         // We trust RoxItems.Collection.borowRoxItem to get the correct itemID
         // (it checks it before returning it).
-        return collection.borrowRoxItem(id: itemID)
+        return collection.borrowRoxNft(id: itemID)
     }
 
-    // initializer
-    //
 	init() {
-        self.CollectionStoragePath = /storage/RoxItemsCollection
-        self.CollectionPublicPath = /public/RoxItemsCollection
-        self.MinterStoragePath = /storage/RoxItemsMinter
+        self.CollectionStoragePath = /storage/RoxCollection
+        self.CollectionPublicPath = /public/RoxCollection
+        self.MinterStoragePath = /storage/RoxMinter
 
         self.totalSupply = 0
 
         let minter <- create NFTMinter()
         self.account.save(<-minter, to: self.MinterStoragePath)
 
-        let collection <- RoxItems.createEmptyCollection()
-        self.account.save(<-collection, to: RoxItems.CollectionStoragePath)
-        self.account.link<&RoxItems.CollectionPrivate{NonFungibleToken.CollectionPublic, RoxItems.RoxItemsCollectionPublic}>(RoxItems.CollectionPublicPath, target: RoxItems.CollectionStoragePath)
+        let collection <- RoxContract.createEmptyCollection()
+        self.account.save(<-collection, to: RoxContract.CollectionStoragePath)
+        self.account.link<&RoxContract.Collection{NonFungibleToken.CollectionPublic, RoxContract.CollectionRoxPublic}>(RoxContract.CollectionPublicPath, target: RoxContract.CollectionStoragePath)
 
         emit ContractInitialized()
 	}
