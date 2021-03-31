@@ -21,9 +21,9 @@ pub contract RoxContract: NonFungibleToken {
     pub resource NFT: NonFungibleToken.INFT {
         // The token's ID
         pub let id: UInt64
-        pub let tier: String // enum in BE
+        pub let tier: String // Tier name
         pub let collectibleId: String
-        pub let mintNumber: UInt64 // Don't know what it is
+        pub let mintNumber: UInt64
 
         init(initID: UInt64, collectibleId: String, tier: String, mintNumber: UInt64) {
             self.id = initID
@@ -47,7 +47,6 @@ pub contract RoxContract: NonFungibleToken {
         }
     }
 
-
     pub resource Collection: CollectionRoxPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic {
 
         pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
@@ -68,9 +67,10 @@ pub contract RoxContract: NonFungibleToken {
             // add the new token to the dictionary which removes the old one
             let oldToken <- self.ownedNFTs[id] <- token
 
-            emit Deposit(id: id, to: self.owner?.address)
+            if (oldToken != nil)
+                panic("how is this even possible?")
 
-            destroy oldToken
+            emit Deposit(id: id, to: self.owner?.address)
         }
 
         pub fun getIDs(): [UInt64] {
