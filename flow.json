@@ -6,10 +6,19 @@
 		}
 	},
 	"contracts": {
-		"NonFungibleToken": "./contracts/NonFungibleToken.cdc",
-		"RoxContract": "./contracts/RoxContract.cdc"
+		"RoxContract": "./contracts/RoxContract.cdc",
+		"NonFungibleToken": {
+			"source": "./contracts/NonFungibleToken.cdc",
+			"aliases": {
+				"testnet": "0x631e88ae7f1d7c20"
+			}
+		}
 	},
 	"networks": {
+		"testnet": {
+			"host": "access.testnet.nodes.onflow.org:9000",
+			"chain": "flow-testnet"
+		},
 		"emulator": {
 			"host": "127.0.0.1:3569",
 			"chain": "emulator"
@@ -23,7 +32,12 @@
 		}
 	},
 	"deployments": {
-		"emulator":{
+		"testnet": {
+			"testnet-account": [
+				"RoxContract"
+			]
+		},
+		"emulator": {
 			"emulator-account": [
 				"NonFungibleToken",
 				"RoxContract"
