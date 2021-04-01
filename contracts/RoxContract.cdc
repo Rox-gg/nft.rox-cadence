@@ -43,7 +43,7 @@ pub contract RoxContract: NonFungibleToken {
             // should be the same as the argument to the function
             post {
                 (result == nil) || (result?.id == id):
-                    "Cannot borrow RoxItem reference: The ID of the returned reference is incorrect"
+                    "Cannot borrow Rox reference: The ID of the returned reference is incorrect"
             }
         }
     }
@@ -86,9 +86,9 @@ pub contract RoxContract: NonFungibleToken {
         }
 
         // borrowRoxItem
-        // Gets a reference to an NFT in the collection as a RoxItem,
+        // Gets a reference to an NFT in the collection as a RoxNft,
         // exposing all of its fields (including the typeID).
-        // This is safe as there are no functions that can be called on the RoxItem.
+        // This is safe as there are no functions that can be called on the RoxNft.
         pub fun borrowRoxNft(id: UInt64): &RoxContract.NFT? {
             if self.ownedNFTs[id] != nil {
                 let ref = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT
@@ -132,8 +132,8 @@ pub contract RoxContract: NonFungibleToken {
 	}
 
     // fetch
-    // Get a reference to a RoxItem from an account's Collection, if available.
-    // If an account does not have a RoxItems.Collection, panic.
+    // Get a reference to a RoxNft from an account's Collection, if available.
+    // If an account does not have a RoxContract.Collection, panic.
     // If it has a collection but does not contain the itemId, return nil.
     // If it has a collection and that collection contains the itemId, return a reference to that.
     //
@@ -142,7 +142,7 @@ pub contract RoxContract: NonFungibleToken {
             .getCapability(RoxContract.CollectionPublicPath)
             .borrow<&RoxContract.Collection{RoxContract.CollectionRoxPublic}>()
             ?? panic("Couldn't get collection")
-        // We trust RoxItems.Collection.borowRoxItem to get the correct itemID
+        // We trust RoxContract.Collection.borowRoxItem to get the correct itemID
         // (it checks it before returning it).
         return collection.borrowRoxNft(id: itemID)
     }
