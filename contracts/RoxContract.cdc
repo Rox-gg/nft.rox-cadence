@@ -6,7 +6,7 @@ pub contract RoxContract: NonFungibleToken {
     pub event ContractInitialized()
     pub event Withdraw(id: UInt64, from: Address?)
     pub event Deposit(id: UInt64, to: Address?)
-    pub event Minted(id: UInt64, collectibleId: String)
+    pub event Minted(id: UInt64, roxId: String)
 
     // Named Paths
     pub let CollectionStoragePath: StoragePath
@@ -23,12 +23,12 @@ pub contract RoxContract: NonFungibleToken {
         // The token's ID
         pub let id: UInt64
         pub let tier: String
-        pub let collectibleId: String
+        pub let roxId: String
         pub let mintNumber: UInt32
 
-        init(initID: UInt64, collectibleId: String, tier: String, mintNumber: UInt32) {
+        init(initID: UInt64, roxId: String, tier: String, mintNumber: UInt32) {
             self.id = initID
-            self.collectibleId = collectibleId
+            self.roxId = roxId
             self.tier = tier
             self.mintNumber = mintNumber
         }
@@ -113,21 +113,21 @@ pub contract RoxContract: NonFungibleToken {
 
 	pub resource NFTMinter {
 
-		pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}, collectibleId: String, tier: String) {
+		pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}, roxId: String, tier: String) {
 
-            emit Minted(id: RoxContract.totalSupply, collectibleId: collectibleId)
+            emit Minted(id: RoxContract.totalSupply, roxId: roxId)
 
-            var numberPerCollectible = RoxContract.numberMintedPerCollectible[collectibleId]
+            var numberPerCollectible = RoxContract.numberMintedPerCollectible[roxId]
             if (numberPerCollectible == nil){
                 numberPerCollectible = 0
-                RoxContract.numberMintedPerCollectible[collectibleId] = numberPerCollectible
+                RoxContract.numberMintedPerCollectible[roxId] = numberPerCollectible
             }
 
             // deposit it in the recipient's account using their reference
-            recipient.deposit(token: <-create RoxContract.NFT(initID: RoxContract.totalSupply, collectibleId: collectibleId, tier: tier, mintNumber: numberPerCollectible!))
+            recipient.deposit(token: <-create RoxContract.NFT(initID: RoxContract.totalSupply, roxId: roxId, tier: tier, mintNumber: numberPerCollectible!))
 
             RoxContract.totalSupply = RoxContract.totalSupply + (1 as UInt64)
-            RoxContract.numberMintedPerCollectible[collectibleId] = numberPerCollectible! + (1 as UInt32)
+            RoxContract.numberMintedPerCollectible[roxId] = numberPerCollectible! + (1 as UInt32)
 		}
 	}
 
