@@ -22,9 +22,9 @@ pub contract RoxContract: NonFungibleToken {
     pub resource NFT: NonFungibleToken.INFT {
         // The token's ID
         pub let id: UInt64
-        pub let tier: String // enum in BE
+        pub let tier: String
         pub let collectibleId: String
-        pub let mintNumber: UInt32 // Don't know what it is
+        pub let mintNumber: UInt32
 
         init(initID: UInt64, collectibleId: String, tier: String, mintNumber: UInt32) {
             self.id = initID
