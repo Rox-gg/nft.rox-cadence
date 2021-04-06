@@ -15,11 +15,11 @@ This is Rox NFT contracts repository.
 
 ### Deployment on testnet ###
 
-- flow project deploy -f flow.json -f flow.testnet.json
+- `flow project deploy -f flow.json -f flow.testnet.json`
 
 ### Playground ###
 
-Onflow playground <https://play.onflow.org/978b11e2-5c78-4648-ab66-6c0c5b56e8ad>
+Onflow playground: <https://play.onflow.org/978b11e2-5c78-4648-ab66-6c0c5b56e8ad>
 
 ### Who do I talk to? ###
 
