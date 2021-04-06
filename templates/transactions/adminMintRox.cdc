@@ -1,7 +1,7 @@
 import NonFungibleToken from 0xNFTADDRESS
 import RoxContract from 0xNFTCONTRACTADDRESS
 
-transaction(recipient: Address, boxId: UInt32, roxId: String, tier: String) {
+transaction(recipient: Address, boxId: UInt32, roxId: String, tier: String, metadata: {String: String}) {
     
     let adminRef: &RoxContract.Admin
 
@@ -20,6 +20,6 @@ transaction(recipient: Address, boxId: UInt32, roxId: String, tier: String) {
             .borrow<&{NonFungibleToken.CollectionPublic}>()
             ?? panic("Could not get receiver reference to the NFT Collection")
 
-        boxRef.mintRox(recipient: receiver, boxId: boxId, roxId: roxId, tier: tier)
+        boxRef.mintRox(recipient: receiver, boxId: boxId, roxId: roxId, tier: tier, metadata: metadata)
     }
 }

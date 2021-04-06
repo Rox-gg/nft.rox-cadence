@@ -32,9 +32,9 @@ pub contract RoxContract: NonFungibleToken {
         // Unique ID for the box
         pub let boxId: UInt32
         pub let name: String
+        pub let metadata: {String: String}
         pub var locked: Bool
         pub var numberMintedPerRox: {String: UInt32}
-        pub let metadata: {String: String}
 
         init(name: String, metadata: {String: String}) {
             pre {
@@ -61,7 +61,7 @@ pub contract RoxContract: NonFungibleToken {
             }
         }
 
-        pub fun mintRox(recipient: &{NonFungibleToken.CollectionPublic}, boxId: UInt32, roxId: String, tier: String) {
+        pub fun mintRox(recipient: &{NonFungibleToken.CollectionPublic}, boxId: UInt32, roxId: String, tier: String, metadata: {String: String}) {
             pre {
                 !self.locked: "Cannot mint the rox: This box is locked"
             }
@@ -77,7 +77,8 @@ pub contract RoxContract: NonFungibleToken {
             recipient.deposit(token: <-create NFT(boxId: boxId,
                                                   roxId: roxId,
                                                   tier: tier,
-                                                  mintNumber: self.numberMintedPerRox[roxId]!))
+                                                  mintNumber: self.numberMintedPerRox[roxId]!,
+                                                  metadata: metadata))
 
             emit Minted(id: RoxContract.totalSupply, roxId: roxId)
 		}
@@ -92,9 +93,10 @@ pub contract RoxContract: NonFungibleToken {
         pub let boxId: UInt32
         pub let roxId: String
         pub let tier: String
+        pub let metadata: {String: String}
         pub let mintNumber: UInt32
 
-        init(boxId: UInt32, roxId: String, tier: String, mintNumber: UInt32) {
+        init(boxId: UInt32, roxId: String, tier: String, mintNumber: UInt32, metadata: {String: String}) {
             
             RoxContract.totalSupply = RoxContract.totalSupply + 1 as UInt64
             
@@ -104,6 +106,7 @@ pub contract RoxContract: NonFungibleToken {
             self.roxId = roxId
             self.tier = tier
             self.mintNumber = mintNumber
+            self.metadata = metadata
         }
 
         destroy() {
