@@ -11,7 +11,7 @@ import (
 const (
 	nonfungibleTokenFilename       = "NonFungibleToken.cdc"
 	roxContractFilename            = "RoxContract.cdc"
-	defaultNonFungibleTokenAddress = "02"
+	defaultNonFungibleTokenAddress = "\"NonFungibleToken.cdc\""
 )
 
 // NonFungibleToken returns the NonFungibleToken contract interface.
@@ -25,7 +25,7 @@ func RoxContract(nonfungibleTokenAddr string) []byte {
 
 	code = strings.ReplaceAll(
 		code,
-		"0x"+defaultNonFungibleTokenAddress,
+		defaultNonFungibleTokenAddress,
 		"0x"+nonfungibleTokenAddr,
 	)
 
