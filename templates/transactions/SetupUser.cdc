@@ -15,7 +15,7 @@ transaction {
       signer.save(<-collection, to: RoxContract.CollectionStoragePath)
 
       // create a public capability for the collection
-      signer.link<&RoxContract.Collection{NonFungibleToken.CollectionPublic, RoxContract.CollectionRoxPublic}>(RoxContract.CollectionPublicPath, target: RoxContract.CollectionStoragePath)
+      signer.link<&RoxContract.Collection{NonFungibleToken.CollectionPublic, RoxContract.RoxCollectionPublic}>(RoxContract.CollectionPublicPath, target: RoxContract.CollectionStoragePath)
       
       log("Completed setup for account:")
       log(signer.address)

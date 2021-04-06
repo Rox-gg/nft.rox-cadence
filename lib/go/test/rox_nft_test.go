@@ -108,12 +108,32 @@ func TestCreateNFT(t *testing.T) {
 	result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 	assert.Equal(t, cadence.NewInt(0), result)
 
+	script := templates.GenerateCreateBoxTransaction(env)
+	tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
+	_ = tx.AddArgument(cadence.NewString("first box"))
+	signAndSubmit(
+		t, b, tx,
+		[]flow.Address{
+			b.ServiceKey().Address,
+			tokenAddr,
+		},
+		[]crypto.Signer{
+			b.ServiceKey().Signer(),
+			tokenSigner,
+		},
+		false,
+	)
+
+	result = executeScriptAndCheck(t, b, templates.GenerateNextBoxIdScript(env), nil)
+	assert.Equal(t, cadence.NewUInt32(2), result)
+
 	t.Run("Should be able to mint a token", func(t *testing.T) {
 
 		script := templates.GenerateMintNFTTransaction(env)
 		tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
 
 		_ = tx.AddArgument(cadence.NewAddress(tokenAddr)) // Now it transfers to same minter account
+		_ = tx.AddArgument(cadence.NewUInt32(1))
 		_ = tx.AddArgument(cadence.NewString("1"))
 		_ = tx.AddArgument(cadence.NewString("1"))
 
@@ -133,8 +153,8 @@ func TestCreateNFT(t *testing.T) {
 		// Assert that the account's collection is correct
 		result = executeScriptAndCheck(t, b,
 			templates.GenerateBorrowNftScript(env),
-			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(0))})
-		assert.Equal(t, cadence.NewUInt64(0), result)
+			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(1))})
+		assert.Equal(t, cadence.NewUInt64(1), result)
 
 		result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(1), result)
@@ -191,10 +211,29 @@ func TestTransferNFT(t *testing.T) {
 		ContractAddress:         tokenAddr.String(),
 	}
 
+	script := templates.GenerateCreateBoxTransaction(env)
+	tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
+	_ = tx.AddArgument(cadence.NewString("first box"))
+	signAndSubmit(
+		t, b, tx,
+		[]flow.Address{
+			b.ServiceKey().Address,
+			tokenAddr,
+		},
+		[]crypto.Signer{
+			b.ServiceKey().Signer(),
+			tokenSigner,
+		},
+		false,
+	)
+
+	result := executeScriptAndCheck(t, b, templates.GenerateNextBoxIdScript(env), nil)
+	assert.Equal(t, cadence.NewUInt32(2), result)
+
 	joshAccountKey, joshSigner := accountKeys.NewWithSigner()
 	joshAddress, err := b.CreateAccount([]*flow.AccountKey{joshAccountKey}, nil)
 
-	tx := flow.NewTransaction().
+	tx = flow.NewTransaction().
 		SetScript(templates.GenerateMintNFTTransaction(env)).
 		SetGasLimit(100).
 		SetProposalKey(
@@ -206,6 +245,7 @@ func TestTransferNFT(t *testing.T) {
 		AddAuthorizer(tokenAddr)
 
 	_ = tx.AddArgument(cadence.NewAddress(tokenAddr)) // Now it transfers to same minter account
+	_ = tx.AddArgument(cadence.NewUInt32(1))
 	_ = tx.AddArgument(cadence.NewString("1"))
 	_ = tx.AddArgument(cadence.NewString("1"))
 
@@ -281,7 +321,7 @@ func TestTransferNFT(t *testing.T) {
 		tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
 
 		_ = tx.AddArgument(cadence.NewAddress(joshAddress))
-		_ = tx.AddArgument(cadence.NewUInt64(0))
+		_ = tx.AddArgument(cadence.NewUInt64(1))
 
 		signAndSubmit(
 			t, b, tx,
@@ -299,8 +339,8 @@ func TestTransferNFT(t *testing.T) {
 		// Assert that the account's collection is correct
 		result := executeScriptAndCheck(t, b,
 			templates.GenerateBorrowNftScript(env),
-			[][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress)), jsoncdc.MustEncode(cadence.UInt64(0))})
-		assert.Equal(t, cadence.NewUInt64(0), result)
+			[][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress)), jsoncdc.MustEncode(cadence.UInt64(1))})
+		assert.Equal(t, cadence.NewUInt64(1), result)
 
 		result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(joshAddress))})
 		assert.Equal(t, cadence.NewInt(1), result)
@@ -315,7 +355,7 @@ func TestTransferNFT(t *testing.T) {
 
 		tx := createTxWithTemplateAndAuthorizer(b, templates.GenerateDestroyScript(env), joshAddress)
 
-		_ = tx.AddArgument(cadence.NewUInt64(0))
+		_ = tx.AddArgument(cadence.NewUInt64(1))
 
 		signAndSubmit(
 			t, b, tx,

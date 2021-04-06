@@ -6,6 +6,7 @@ import (
 
 const (
 	setupUserFilename      = "transactions/setupUser.cdc"
+	adminCreateBoxFilename = "transactions/adminCreateBox.cdc"
 	adminAssignRoxFilename = "transactions/adminMintRox.cdc"
 	transferRoxFilename    = "transactions/transferRox.cdc"
 	destroyRoxFilename     = "transactions/destroyRox.cdc"
@@ -16,6 +17,12 @@ const (
 // reference to the collection.
 func GenerateCreateCollectionScript(env Environment) []byte {
 	code := assets.MustAssetString(setupUserFilename)
+
+	return []byte(replaceAddresses(code, env))
+}
+
+func GenerateCreateBoxTransaction(env Environment) []byte {
+	code := assets.MustAssetString(adminCreateBoxFilename)
 
 	return []byte(replaceAddresses(code, env))
 }
