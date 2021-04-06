@@ -1,27 +1,25 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This is Rox NFT contracts repository.
 
-### What is this repository for? ###
+### Testing ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+- `lib\go\contracts go generate`
+- `lib\go\templates go generate`
+- `lib\go\test go test`
 
-### How do I get set up? ###
+### Deployment on emulator ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+- `flow project start-emulator`
+- in another terminal `flow project deploy`
 
-### Contribution guidelines ###
+### Deployment on testnet ###
 
-* Writing tests
-* Code review
-* Other guidelines
+- flow project deploy -f flow.json -f flow.testnet.json
+
+### Playground ###
+
+Onflow playground <https://play.onflow.org/978b11e2-5c78-4648-ab66-6c0c5b56e8ad>
 
 ### Who do I talk to? ###
 
