@@ -1,16 +1,16 @@
 package test
 
 //These package tests the following scenarios:
-// TestRoxItemsDeployment - the deployment of contracts
-// TestCreateNFT - RoxItem creation
-//		* minting a new RoxItem
-//		* borrowing unexisting RoxItem fails
-// TestTransferNFT - transfers RoxItem from one account to another
-//		* minting a new RoxItem
+// TestRoxContractDeployment - the deployment of contracts
+// TestCreateNFT - RoxNft creation
+//		* minting a new RoxNft
+//		* borrowing unexisting RoxNft fails
+// TestTransferNFT - transfers RoxNft from one account to another
+//		* minting a new RoxNft
 //		* setuping new collection in new account
-//		* withdrawing unexisting RoxItem fails
-//		* transfering RoxItem from one account to another
-//		* destroying RoxItem
+//		* withdrawing unexisting RoxNft fails
+//		* transfering RoxNft from one account to another
+//		* destroying RoxNft
 
 import (
 	"testing"

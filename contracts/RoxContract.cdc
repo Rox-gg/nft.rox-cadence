@@ -15,6 +15,7 @@ pub contract RoxContract: NonFungibleToken {
 
     // The total number of NFT that have been minted
     pub var totalSupply: UInt64
+    
     pub var numberMintedPerCollectible: {String: UInt32}
 
     // NFT
@@ -22,8 +23,8 @@ pub contract RoxContract: NonFungibleToken {
     pub resource NFT: NonFungibleToken.INFT {
         // The token's ID
         pub let id: UInt64
-        pub let tier: String
         pub let roxId: String
+        pub let tier: String
         pub let mintNumber: UInt32
 
         init(initID: UInt64, roxId: String, tier: String, mintNumber: UInt32) {
@@ -85,7 +86,7 @@ pub contract RoxContract: NonFungibleToken {
             return &self.ownedNFTs[id] as &NonFungibleToken.NFT
         }
 
-        // borrowRoxItem
+        // borrowRoxNft
         // Gets a reference to an NFT in the collection as a RoxNft,
         // exposing all of its fields (including the typeID).
         // This is safe as there are no functions that can be called on the RoxNft.
