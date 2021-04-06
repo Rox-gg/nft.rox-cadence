@@ -77,7 +77,6 @@ pub contract RoxContract: NonFungibleToken {
                                                   tier: tier,
                                                   mintNumber: self.numberMintedPerRox[roxId]!))
 
-
             emit Minted(id: RoxContract.totalSupply, roxId: roxId)
 		}
     }
