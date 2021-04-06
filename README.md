@@ -1,4 +1,4 @@
-# README #
+# ROX NFT #
 
 This is Rox NFT contracts repository.
 
