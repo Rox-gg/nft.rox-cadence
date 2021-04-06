@@ -111,6 +111,8 @@ func TestCreateNFT(t *testing.T) {
 	script := templates.GenerateCreateBoxTransaction(env)
 	tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
 	_ = tx.AddArgument(cadence.NewString("first box"))
+	metadata := []cadence.KeyValuePair{{Key: cadence.NewString("Name"), Value: cadence.NewString("Sketch")}}
+	_ = tx.AddArgument(cadence.NewDictionary(metadata))
 	signAndSubmit(
 		t, b, tx,
 		[]flow.Address{
@@ -214,6 +216,8 @@ func TestTransferNFT(t *testing.T) {
 	script := templates.GenerateCreateBoxTransaction(env)
 	tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
 	_ = tx.AddArgument(cadence.NewString("first box"))
+	metadata := []cadence.KeyValuePair{{Key: cadence.NewString("Name"), Value: cadence.NewString("Sketch")}}
+	_ = tx.AddArgument(cadence.NewDictionary(metadata))
 	signAndSubmit(
 		t, b, tx,
 		[]flow.Address{

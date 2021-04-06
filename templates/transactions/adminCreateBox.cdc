@@ -1,7 +1,7 @@
 import NonFungibleToken from 0xNFTADDRESS
 import RoxContract from 0xNFTCONTRACTADDRESS
 
-transaction(name: String) {
+transaction(name: String, metadata: {String: String}) {
     
     let adminRef: &RoxContract.Admin
 
@@ -12,7 +12,7 @@ transaction(name: String) {
     }
 
     execute {
-        self.adminRef.createBox(name: name)
+        self.adminRef.createBox(name: name, metadata: metadata)
 
         log("Created box")
         log(name)

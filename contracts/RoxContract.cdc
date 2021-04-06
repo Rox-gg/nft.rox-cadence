@@ -34,8 +34,9 @@ pub contract RoxContract: NonFungibleToken {
         pub let name: String
         pub var locked: Bool
         pub var numberMintedPerRox: {String: UInt32}
+        pub let metadata: {String: String}
 
-        init(name: String) {
+        init(name: String, metadata: {String: String}) {
             pre {
                 name.length > 0: "New Box name cannot be empty"
             }
@@ -43,6 +44,7 @@ pub contract RoxContract: NonFungibleToken {
             self.name = name 
             self.locked = false
             self.numberMintedPerRox = {}
+            self.metadata = metadata
 
             // Increment the boxID so that it isn't used again
             RoxContract.nextBoxId = RoxContract.nextBoxId + (1 as UInt32)
@@ -193,8 +195,8 @@ pub contract RoxContract: NonFungibleToken {
 
     pub resource Admin {
 
-        pub fun createBox(name: String) {
-            var newBox <- create Box(name: name)
+        pub fun createBox(name: String, metadata: {String: String}) {
+            var newBox <- create Box(name: name, metadata: metadata)
             RoxContract.boxes[newBox.boxId] <-! newBox
         }
 
