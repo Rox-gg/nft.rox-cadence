@@ -80,7 +80,7 @@ pub contract RoxContract: NonFungibleToken {
                                                   metadata: metadata))
 
             emit Minted(id: RoxContract.totalSupply, roxId: roxId)
-		}
+        }
     }
 
     // NFT
@@ -231,7 +231,7 @@ pub contract RoxContract: NonFungibleToken {
     // RoxContract initialization function
     // -----------------------------------------------------------------------
     //
-	init() {
+    init() {
         self.CollectionStoragePath = /storage/RoxCollection
         self.CollectionPublicPath = /public/RoxCollection
         self.AdminStoragePath = /storage/RoxAdmin
