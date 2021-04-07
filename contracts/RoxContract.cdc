@@ -92,8 +92,8 @@ pub contract RoxContract: NonFungibleToken {
         pub let boxId: UInt32
         pub let roxId: String
         pub let tier: String
-        pub let metadata: {String: String}
         pub let mintNumber: UInt32
+        pub let metadata: {String: String}
 
         init(boxId: UInt32, roxId: String, tier: String, mintNumber: UInt32, metadata: {String: String}) {
             
