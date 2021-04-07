@@ -108,7 +108,7 @@ func TestCreateNFT(t *testing.T) {
 	result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 	assert.Equal(t, cadence.NewInt(0), result)
 
-	script := templates.GenerateCreateBoxTransaction(env)
+	script := templates.GenerateMintBoxTransaction(env)
 	tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
 	_ = tx.AddArgument(cadence.NewString("first box"))
 	metadata := []cadence.KeyValuePair{{Key: cadence.NewString("Name"), Value: cadence.NewString("Sketch")}}
@@ -214,7 +214,7 @@ func TestTransferNFT(t *testing.T) {
 		ContractAddress:         tokenAddr.String(),
 	}
 
-	script := templates.GenerateCreateBoxTransaction(env)
+	script := templates.GenerateMintBoxTransaction(env)
 	tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
 	_ = tx.AddArgument(cadence.NewString("first box"))
 	metadata := []cadence.KeyValuePair{{Key: cadence.NewString("Name"), Value: cadence.NewString("Sketch")}}

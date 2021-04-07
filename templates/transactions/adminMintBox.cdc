@@ -8,11 +8,11 @@ transaction(name: String, metadata: {String: String}) {
     prepare(adminAcc: AuthAccount) {
 
         self.adminRef = adminAcc.borrow<&RoxContract.Admin>(from: RoxContract.AdminStoragePath)
-            ?? panic("Could not borrow a reference to the NFT minter")
+            ?? panic("Could not borrow a reference to the RoxAdmin")
     }
 
     execute {
-        self.adminRef.createBox(name: name, metadata: metadata)
+        self.adminRef.mintBox(name: name, metadata: metadata)
 
         log("Created box")
         log(name)

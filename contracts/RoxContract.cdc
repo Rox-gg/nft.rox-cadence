@@ -197,7 +197,7 @@ pub contract RoxContract: NonFungibleToken {
 
     pub resource Admin {
 
-        pub fun createBox(name: String, metadata: {String: String}) {
+        pub fun mintBox(name: String, metadata: {String: String}) {
             var newBox <- create Box(name: name, metadata: metadata)
             RoxContract.boxes[newBox.boxId] <-! newBox
         }
