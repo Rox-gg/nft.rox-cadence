@@ -251,5 +251,3 @@ pub contract RoxContract: NonFungibleToken {
         emit ContractInitialized()
     }
 }
- 
- 
