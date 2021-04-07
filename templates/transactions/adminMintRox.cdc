@@ -20,6 +20,6 @@ transaction(recipient: Address, boxId: UInt32, roxId: String, tier: String, meta
             .borrow<&{NonFungibleToken.CollectionPublic}>()
             ?? panic("Could not get receiver reference to the NFT Collection")
 
-        boxRef.mintRox(recipient: receiver, boxId: boxId, roxId: roxId, tier: tier, metadata: metadata)
+        boxRef.mintRox(recipient: receiver, roxId: roxId, tier: tier, metadata: metadata)
     }
 }

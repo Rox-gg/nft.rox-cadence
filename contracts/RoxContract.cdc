@@ -61,7 +61,7 @@ pub contract RoxContract: NonFungibleToken {
             }
         }
 
-        pub fun mintRox(recipient: &{NonFungibleToken.CollectionPublic}, boxId: UInt32, roxId: String, tier: String, metadata: {String: String}) {
+        pub fun mintRox(recipient: &{NonFungibleToken.CollectionPublic}, roxId: String, tier: String, metadata: {String: String}) {
             pre {
                 !self.locked: "Cannot mint the rox: This box is locked"
             }
@@ -70,10 +70,10 @@ pub contract RoxContract: NonFungibleToken {
                 self.mintedNumberPerRox[roxId] = 0
             }
             self.mintedNumberPerRox[roxId] = self.mintedNumberPerRox[roxId]! + (1 as UInt32)
-            RoxContract.mintedNumberPerBox[self.boxId] = RoxContract.mintedNumberPerBox[boxId]! + (1 as UInt32)
+            RoxContract.mintedNumberPerBox[self.boxId] = RoxContract.mintedNumberPerBox[self.boxId]! + (1 as UInt32)
 
             // deposit it in the recipient's account using their reference
-            recipient.deposit(token: <-create NFT(boxId: boxId,
+            recipient.deposit(token: <-create NFT(boxId: self.boxId,
                                                   roxId: roxId,
                                                   tier: tier,
                                                   mintNumber: self.mintedNumberPerRox[roxId]!,
@@ -249,7 +249,7 @@ pub contract RoxContract: NonFungibleToken {
         self.account.save(<-admin, to: self.AdminStoragePath)
 
         emit ContractInitialized()
-	}
+    }
 }
  
  
