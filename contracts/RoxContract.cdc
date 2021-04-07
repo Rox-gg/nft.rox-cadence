@@ -20,7 +20,7 @@ pub contract RoxContract: NonFungibleToken {
     pub let AdminStoragePath: StoragePath
 
     access(self) var boxes: @{UInt32: Box}
-    access(self) var numberMintedPerBox: {UInt32: UInt32}
+    access(self) var mintedNumberPerBox: {UInt32: UInt32}
 
     pub var nextBoxId: UInt32
 
@@ -34,7 +34,7 @@ pub contract RoxContract: NonFungibleToken {
         pub let name: String
         pub let metadata: {String: String}
         pub var locked: Bool
-        pub var numberMintedPerRox: {String: UInt32}
+        pub var mintedNumberPerRox: {String: UInt32}
 
         init(name: String, metadata: {String: String}) {
             pre {
@@ -43,12 +43,12 @@ pub contract RoxContract: NonFungibleToken {
             self.boxId = RoxContract.nextBoxId
             self.name = name 
             self.locked = false
-            self.numberMintedPerRox = {}
+            self.mintedNumberPerRox = {}
             self.metadata = metadata
 
             // Increment the boxID so that it isn't used again
             RoxContract.nextBoxId = RoxContract.nextBoxId + (1 as UInt32)
-            RoxContract.numberMintedPerBox[self.boxId] = 0
+            RoxContract.mintedNumberPerBox[self.boxId] = 0
 
             emit BoxCreated(boxId: self.boxId)
         }
@@ -66,18 +66,17 @@ pub contract RoxContract: NonFungibleToken {
                 !self.locked: "Cannot mint the rox: This box is locked"
             }
 
-            var mintedNumber = self.numberMintedPerRox[roxId]
-            if (mintedNumber == nil){
-                mintedNumber = 0
+            if (self.mintedNumberPerRox[roxId] == nil){
+                self.mintedNumberPerRox[roxId] = 0
             }
-            self.numberMintedPerRox[roxId] = mintedNumber! + (1 as UInt32)
-            RoxContract.numberMintedPerBox[self.boxId] = RoxContract.numberMintedPerBox[boxId]! + (1 as UInt32)
+            self.mintedNumberPerRox[roxId] = self.mintedNumberPerRox[roxId]! + (1 as UInt32)
+            RoxContract.mintedNumberPerBox[self.boxId] = RoxContract.mintedNumberPerBox[boxId]! + (1 as UInt32)
 
             // deposit it in the recipient's account using their reference
             recipient.deposit(token: <-create NFT(boxId: boxId,
                                                   roxId: roxId,
                                                   tier: tier,
-                                                  mintNumber: self.numberMintedPerRox[roxId]!,
+                                                  mintNumber: self.mintedNumberPerRox[roxId]!,
                                                   metadata: metadata))
 
             emit Minted(id: RoxContract.totalSupply, roxId: roxId)
@@ -225,7 +224,7 @@ pub contract RoxContract: NonFungibleToken {
     }
 
     pub fun getNumberMintedRoxInBox(boxId: UInt32): UInt32? {
-        return RoxContract.numberMintedPerBox[boxId]
+        return RoxContract.mintedNumberPerBox[boxId]
     }
 
     // -----------------------------------------------------------------------
@@ -240,7 +239,7 @@ pub contract RoxContract: NonFungibleToken {
         self.totalSupply = 0
         self.nextBoxId = 1
         self.boxes <- {}
-        self.numberMintedPerBox = {}
+        self.mintedNumberPerBox = {}
 
         let collection <- RoxContract.createEmptyCollection()
         self.account.save(<-collection, to: RoxContract.CollectionStoragePath)
