@@ -5,11 +5,12 @@ import (
 )
 
 const (
-	setupUserFilename    = "transactions/setupUser.cdc"
-	adminMintBoxFilename = "transactions/adminMintBox.cdc"
-	adminMintRoxFilename = "transactions/adminMintRox.cdc"
-	transferRoxFilename  = "transactions/transferRox.cdc"
-	destroyRoxFilename   = "transactions/destroyRox.cdc"
+	setupUserFilename         = "transactions/setupUser.cdc"
+	adminMintBoxFilename      = "transactions/adminMintBox.cdc"
+	adminMintRoxFilename      = "transactions/adminMintRox.cdc"
+	adminBatchMintRoxFilename = "transactions/adminBatchMintRox.cdc"
+	transferRoxFilename       = "transactions/transferRox.cdc"
+	destroyRoxFilename        = "transactions/destroyRox.cdc"
 )
 
 // GenerateCreateCollectionScript Creates a script that instantiates a new
@@ -31,6 +32,14 @@ func GenerateMintBoxTransaction(env Environment) []byte {
 // to mint a new NFT and deposit it into a user's collection
 func GenerateMintNFTTransaction(env Environment) []byte {
 	code := assets.MustAssetString(adminMintRoxFilename)
+
+	return []byte(replaceAddresses(code, env))
+}
+
+// GenerateMintNFTScript Creates a script that uses the admin resource
+// to mint a new NFT and deposit it into a user's collection
+func GenerateBatchMintNFTTransaction(env Environment) []byte {
+	code := assets.MustAssetString(adminBatchMintRoxFilename)
 
 	return []byte(replaceAddresses(code, env))
 }

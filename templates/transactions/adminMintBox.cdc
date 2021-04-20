@@ -14,7 +14,7 @@ transaction(name: String, metadata: {String: String}) {
     execute {
         self.adminRef.mintBox(name: name, metadata: metadata)
 
-        log("Created box")
+        log("Minted box")
         log(name)
     }
 }

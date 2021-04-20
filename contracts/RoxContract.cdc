@@ -8,6 +8,8 @@ pub contract RoxContract: NonFungibleToken {
     pub event Withdraw(id: UInt64, from: Address?)
     pub event Deposit(id: UInt64, to: Address?)
     pub event Minted(id: UInt64, roxId: String)
+    pub event BatchMinted(quantity: UInt64, roxId: String)
+
 
     pub event BoxCreated(boxId: UInt32)
     // Emitted when a Box is locked, meaning Rox Nfts cannot be added
@@ -80,6 +82,20 @@ pub contract RoxContract: NonFungibleToken {
                                                   metadata: metadata))
 
             emit Minted(id: RoxContract.totalSupply, roxId: roxId)
+        }
+
+        pub fun batchMintRox(recipient: &{NonFungibleToken.CollectionPublic}, quantity: UInt64, roxId: String, tier: String, metadata: {String: String}) {
+            pre {
+                !self.locked: "Cannot mint the rox: This box is locked"
+            }
+
+            var i: UInt64 = 0
+            while i < quantity {
+                self.mintRox(recipient: recipient, roxId: roxId, tier: tier, metadata: metadata)
+                i = i + 1 as UInt64
+            }
+
+            emit BatchMinted(quantity: quantity, roxId: roxId)
         }
     }
 

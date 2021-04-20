@@ -166,12 +166,50 @@ func TestCreateNFT(t *testing.T) {
 		assert.Equal(t, cadence.NewInt(1), result)
 	})
 
+	t.Run("Should be able to batch mint a token", func(t *testing.T) {
+
+		script := templates.GenerateBatchMintNFTTransaction(env)
+		tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
+
+		_ = tx.AddArgument(cadence.NewAddress(tokenAddr)) // Now it transfers to same minter account
+		_ = tx.AddArgument(cadence.NewUInt32(1))
+		_ = tx.AddArgument(cadence.NewUInt64(10))
+		_ = tx.AddArgument(cadence.NewString("1"))
+		_ = tx.AddArgument(cadence.NewString("1"))
+		_ = tx.AddArgument(cadence.NewDictionary([]cadence.KeyValuePair{}))
+
+		signAndSubmit(
+			t, b, tx,
+			[]flow.Address{
+				b.ServiceKey().Address,
+				tokenAddr,
+			},
+			[]crypto.Signer{
+				b.ServiceKey().Signer(),
+				tokenSigner,
+			},
+			false,
+		)
+
+		// Assert that the account's collection is correct
+		result = executeScriptAndCheck(t, b,
+			templates.GenerateBorrowNftScript(env),
+			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(10))})
+		assert.Equal(t, cadence.NewUInt64(10), result)
+
+		result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
+		assert.Equal(t, cadence.NewInt(11), result)
+
+		executeScriptAndCheck(t, b, templates.GenerateTotalSupplyScript(env), nil)
+		assert.Equal(t, cadence.NewInt(11), result)
+	})
+
 	t.Run("Shouldn't be able to borrow a reference to an NFT that doesn't exist", func(t *testing.T) {
 
 		// Assert that the account's collection is correct
 		result, err := b.ExecuteScript(
 			templates.GenerateBorrowNftScript(env),
-			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(5))})
+			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(29))})
 		require.NoError(t, err)
 		assert.True(t, result.Reverted())
 	})
@@ -217,7 +255,7 @@ func TestTransferNFT(t *testing.T) {
 	script := templates.GenerateMintBoxTransaction(env)
 	tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
 	_ = tx.AddArgument(cadence.NewString("first box"))
-	metadata := []cadence.KeyValuePair{{Key: cadence.NewString("Name"), Value: cadence.NewString("Sketch")}}
+	metadata := []cadence.KeyValuePair{}
 	_ = tx.AddArgument(cadence.NewDictionary(metadata))
 	signAndSubmit(
 		t, b, tx,
