@@ -10,7 +10,6 @@ pub contract RoxContract: NonFungibleToken {
     pub event Minted(id: UInt64, roxId: String)
     pub event BatchMinted(quantity: UInt64, roxId: String)
 
-
     pub event BoxCreated(boxId: UInt32)
     // Emitted when a Box is locked, meaning Rox Nfts cannot be added
     pub event BoxLocked(boxId: UInt32)
