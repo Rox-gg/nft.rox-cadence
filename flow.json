@@ -33,7 +33,10 @@
 	},
 	"deployments": {
 		"testnet": {
-			"testnet-account": [
+			"test-testnet-account": [
+				"RoxContract"
+			],
+			"prod-testnet-account": [
 				"RoxContract"
 			]
 		},

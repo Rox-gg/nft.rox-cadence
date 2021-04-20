@@ -49,4 +49,5 @@ Thumbs.db
 *.wmv
 
 flow.testnet.json
+flow.prod.json
 
