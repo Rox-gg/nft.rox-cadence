@@ -230,16 +230,24 @@ pub contract RoxContract: NonFungibleToken {
         }
     }
 
-    pub fun getBoxName(boxId: UInt32): String? {
-        return RoxContract.boxes[boxId]?.name
-    }
+    pub struct BoxData {
+        pub let boxId: UInt32
+        pub let name: String
+        pub let metadata: {String: String}
+        pub var locked: Bool
+        pub var mintedNumberPerRox: {String: UInt32}
 
-    pub fun isBoxLocked(boxId: UInt32): Bool? {
-        return RoxContract.boxes[boxId]?.locked
-    }
+        init(boxId: UInt32) {
+            pre {
+                RoxContract.boxes[boxId] != nil: "Box does not exist"
+            }
 
-    pub fun getNumberMintedRoxInBox(boxId: UInt32): UInt32? {
-        return RoxContract.mintedNumberPerBox[boxId]
+            self.boxId = RoxContract.boxes[boxId]?.boxId!
+            self.name = RoxContract.boxes[boxId]?.name!
+            self.metadata = RoxContract.boxes[boxId]?.metadata!
+            self.locked = RoxContract.boxes[boxId]?.locked!
+            self.mintedNumberPerRox = RoxContract.boxes[boxId]?.mintedNumberPerRox!
+        }
     }
 
     // -----------------------------------------------------------------------
