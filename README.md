@@ -59,11 +59,9 @@ In the box there can be many different types and different number of Roxes minte
 All the roxes are minted through the box. Roxes in the box are grouped by `roxId`.
 Which means that a box can contain many different types of roxes with different number for each rox type. The following property tracks how many Roxes are in the box per Rox type.
 
-```cadence
-
+```
 // The number of minted Rox NFTs per specific rox type (roxId)
 pub var mintedNumberPerRox: {String: UInt32}
-
 ```
 
 Each Rox NFT is a resource object containing the following fields.
