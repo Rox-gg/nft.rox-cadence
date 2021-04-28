@@ -45,23 +45,25 @@ minting and transfering Roxes.
  that are used to read information from the smart contract
  or from a resource in account storage.
  - `lib/` : This directory contains packages for specific programming languages
- to be able to read copies of the Top Shot smart contracts, transaction templates,
+ to be able to read copies of the NFT Rox smart contracts, transaction templates,
  and scripts. Also contains automated tests written in GO language.
 
- ## Contract Overview
+## Contract Overview
 
 Each ROX represents a special moment from a streamer's history.
 
 Roxes are grouped into boxes and each Rox belongs to a specific box.
 
-In the box there can be many different types and different number of roxes minted.
+In the box there can be many different types and different number of Roxes minted.
 
-All the roxes are minted through the box. Roxes in the box are grouped by roxId.
-Which means that a box can contain many different types of roxes with different number for each rox type. The following property tracks how many roxes are in the box per rox type.
+All the roxes are minted through the box. Roxes in the box are grouped by `roxId`.
+Which means that a box can contain many different types of roxes with different number for each rox type. The following property tracks how many Roxes are in the box per Rox type.
 
 ```cadence
+
 // The number of minted Rox NFTs per specific rox type (roxId)
 pub var mintedNumberPerRox: {String: UInt32}
+
 ```
 
 Each Rox NFT is a resource object containing the following fields.
