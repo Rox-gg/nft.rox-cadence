@@ -24,8 +24,6 @@ the core functionality of the NFT.
 | Testnet | `0x54a8fcf94992730f` |
 | Mainnet | `-` |
 
-`RoxMarket.cdc`: coming soon
-
 ## Directory Structure
 
 The directories here are organized into contracts, scripts, and transactions.
