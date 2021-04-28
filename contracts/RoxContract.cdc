@@ -7,7 +7,7 @@
     The contract provides functionality to mint Rox boxes,
     fill boxes with newly minted Rox NFTs and transfer them.
 
-    Each Rox Box contains a list of different types of Rox NFTs
+    Each Rox Box contains a track list of different types of Rox NFTs
     where type is specified by the roxId and tier.
 
     Rox Box is managed by the admin and only admin has the ability
@@ -56,7 +56,7 @@ pub contract RoxContract: NonFungibleToken {
 
     // Box is used to manage NFTs
     // It tracks how many NFTs are created per specific rox type
-    // and all the NFTs are created through Box
+    // and all the NFTs are created only through Box
     pub resource Box {
 
         // Unique ID for the box
@@ -132,13 +132,22 @@ pub contract RoxContract: NonFungibleToken {
     // NFT
     // A Rox collectible as an NFT
     pub resource NFT: NonFungibleToken.INFT {
-        // The token's ID
+        
+        // Global unique rox id
         pub let id: UInt64
 
+        // Id of the box that the Rox comes from
         pub let boxId: UInt32
-        pub let roxId: String // Specifies the Rox NFT collectible type
-        pub let tier: String // Specifies the rox tier: platinum, bronze, gold etc.
-        pub let mintNumber: UInt32 // The mint number for this specific rox type in the box
+
+        // Specifies the Rox NFT collectible type
+        pub let roxId: String
+
+        // Specifies the rox tier: platinum, bronze, gold etc.
+        pub let tier: String
+
+        // The mint number for this specific rox type in the box
+        pub let mintNumber: UInt32
+        
         pub let metadata: {String: String}
 
         init(boxId: UInt32, roxId: String, tier: String, mintNumber: UInt32, metadata: {String: String}) {
