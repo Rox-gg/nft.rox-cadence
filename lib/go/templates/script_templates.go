@@ -10,6 +10,7 @@ const (
 	nftCollectionLengthFileName = "scripts/nft_collection_length.cdc"
 	borrowNftFileName           = "scripts/borrow_nft.cdc"
 	boxDataFileName             = "scripts/box_data.cdc"
+	borrowRoxNftFileName        = "scripts/borrow_rox_nft.cdc"
 )
 
 func GenerateBorrowNftScript(env Environment) []byte {
@@ -38,6 +39,12 @@ func GenerateNextBoxIdScript(env Environment) []byte {
 
 func GenerateBoxDataScript(env Environment) []byte {
 	code := assets.MustAssetString(boxDataFileName)
+
+	return []byte(replaceAddresses(code, env))
+}
+
+func GenerateBorrowRoxNftScript(env Environment) []byte {
+	code := assets.MustAssetString(borrowRoxNftFileName)
 
 	return []byte(replaceAddresses(code, env))
 }

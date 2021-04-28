@@ -165,8 +165,13 @@ func TestCreateNFT(t *testing.T) {
 		result = executeScriptAndCheck(t, b, templates.GenerateCollectionLengthScript(env), [][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr))})
 		assert.Equal(t, cadence.NewInt(1), result)
 
-		executeScriptAndCheck(t, b, templates.GenerateTotalSupplyScript(env), nil)
-		assert.Equal(t, cadence.NewInt(1), result)
+		result = executeScriptAndCheck(t, b,
+			templates.GenerateBorrowRoxNftScript(env),
+			[][]byte{jsoncdc.MustEncode(cadence.Address(tokenAddr)), jsoncdc.MustEncode(cadence.UInt64(1))})
+		//assert.Equal(t, cadence.UInt64(1), result.id)
+
+		result = executeScriptAndCheck(t, b, templates.GenerateTotalSupplyScript(env), nil)
+		assert.Equal(t, cadence.UInt64(1), result)
 	})
 
 	t.Run("Should be able to batch mint a token", func(t *testing.T) {
