@@ -48,21 +48,15 @@ minting and transfering Roxes.
 
 ## Contract Overview
 
-Each ROX represents a special moment from a streamer's history.
+Each ROX represents a special moment from a streamer's history. Roxes are grouped into Boxes and each Rox belongs to a specific Box.
 
-Roxes are grouped into boxes and each Rox belongs to a specific box.
-
-In the box there can be many different types and different number of Roxes minted.
-
-All the roxes are minted through the box. Roxes in the box are grouped by `roxId`.
-Which means that a box can contain many different types of roxes with different number for each rox type. The following property tracks how many Roxes are in the box per Rox type.
-
+At the top level, you have a Rox Box. A Rox Box is a container that holds a set of unique Rox (identified by roxId) and also tracks counts of minted Rox for each type of Rox. All the roxes are minted through the box.
 ```
 // The number of minted Rox NFTs per specific rox type (roxId)
 pub var mintedNumberPerRox: {String: UInt32}
 ```
 
-Each Rox NFT is a resource object containing the following fields.
+Each Rox NFT is a resource object containing the following fields:
 
 ```cadence
 // NFT

@@ -5,7 +5,6 @@
 // ../../../templates/scripts/box_data.cdc (190B)
 // ../../../templates/scripts/next_box_id.cdc (154B)
 // ../../../templates/scripts/nft_collection_length.cdc (414B)
-// ../../../templates/scripts/nfts_in_box.cdc (985B)
 // ../../../templates/scripts/rox_nfts_total_supply.cdc (156B)
 // ../../../templates/transactions/adminBatchMintRox.cdc (967B)
 // ../../../templates/transactions/adminMintBox.cdc (544B)
@@ -179,26 +178,6 @@ func scriptsNft_collection_lengthCdc() (*asset, error) {
 
 	info := bindataFileInfo{name: "scripts/nft_collection_length.cdc", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info, digest: [32]uint8{0x5f, 0x3a, 0x97, 0x13, 0xf2, 0x40, 0xce, 0x72, 0x72, 0x5b, 0x40, 0x7c, 0x9c, 0xb1, 0xea, 0xc0, 0x17, 0x58, 0xe3, 0x70, 0x4d, 0x86, 0x47, 0x32, 0x78, 0x1c, 0x7e, 0xbc, 0xba, 0xf7, 0x5c, 0x42}}
-	return a, nil
-}
-
-var _scriptsNfts_in_boxCdc = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x8c\x53\xdb\x8a\x9c\x40\x10\x7d\x1f\x98\x7f\x28\xf6\x21\x28\x0c\x12\x92\x37\xc9\xec\x62\xdc\x0c\xec\x8b\x59\x1c\xf3\x01\x6d\x5b\x3a\x4d\xb4\x4b\xda\x32\x6b\x18\xe6\xdf\x83\x97\x56\x37\x63\x20\x3e\xf4\xc5\xaa\x53\x97\x73\xba\x54\x55\x93\x61\x88\x48\x9f\x5a\x5d\xa8\xb4\xc4\x84\x7e\xa2\x86\xdc\x50\x05\x1f\xbb\xe8\x94\x04\xcf\xcf\xf1\xb7\xf3\x79\xbf\x9b\x5c\x63\xea\x42\xd2\x6c\x84\xe4\x95\x57\xf8\x3d\x4a\xe2\x20\x5c\xbc\xf7\x3b\x36\x42\x37\x42\xb2\x22\xed\x18\x94\xaa\x56\xa8\xd9\x87\x20\xcb\x0c\x36\xcd\x01\x52\xea\x5e\x32\x1f\x7e\xbc\x68\xfe\xfc\xe9\x00\x66\xbc\x9e\xd9\x28\x5d\x1c\x80\x15\x9a\xe5\x56\x21\x8b\x4c\xb0\xf0\xe1\x3a\xfe\xb2\xa6\x9b\x0b\xd7\xfd\x0e\x00\x60\x5c\x4b\x64\x90\x54\x96\x38\xe4\x8d\x31\xf7\xe1\xc3\xaa\x62\x2f\x9c\x6d\x7d\x89\x3d\xa2\x36\x58\x0b\x83\x8e\xc8\x2a\xa5\x03\x29\x7d\x08\x5a\xbe\x04\x52\x52\xab\x79\x88\x3e\xfa\xf5\x5f\x83\x65\xee\x0d\x8e\x31\xe6\x70\x04\x8b\xf1\x52\x32\x86\xde\xbe\xfc\x23\xd5\xa3\xd3\x13\xe5\xc3\xb6\xf5\xcc\x64\x44\x81\xaf\x82\x2f\xee\x92\xaa\xff\x9e\x9e\xa0\x16\x5a\x49\xe7\x21\xa4\xb6\xcc\x40\x13\xc3\x98\x09\x04\x18\xcc\xd1\xa0\x96\x08\x4c\xc0\x17\xec\xa3\xc3\x12\xf5\xc1\xb5\x85\xdf\xec\x01\x3b\x94\x2d\xa3\x25\xcc\xd2\x95\x52\x37\x76\x33\x74\xf7\x8e\xbc\xa9\xaf\xaf\xd4\x39\x93\x5a\xc3\xe6\xae\x39\x19\xe1\x1e\xbd\x69\xcc\xa2\x53\xd2\xac\x6d\x7d\xf8\x59\x7a\x38\x42\x81\x3c\x11\xbb\xbc\x08\x77\x03\x80\xea\x17\x1a\x38\x2e\xd8\xf7\xbc\x78\x05\x72\x28\x6a\x91\xaa\x52\xf1\x6f\x67\x9b\xd6\xd7\x36\x2d\x95\xdc\x60\x75\x16\xeb\xfa\xf7\xab\xbf\x43\xdf\x1e\x9d\xff\x90\xa4\x58\x17\x7d\x27\x4b\x74\x4a\x36\x65\x59\x71\x57\x29\xcd\x31\x75\xeb\x29\xb1\xf1\xe6\xb9\x18\x36\x3b\x16\xfd\xba\x1e\x0a\x7b\x72\x67\xc5\x6f\x7f\x02\x00\x00\xff\xff\x2f\xf6\x03\x83\xd9\x03\x00\x00"
-
-func scriptsNfts_in_boxCdcBytes() ([]byte, error) {
-	return bindataRead(
-		_scriptsNfts_in_boxCdc,
-		"scripts/nfts_in_box.cdc",
-	)
-}
-
-func scriptsNfts_in_boxCdc() (*asset, error) {
-	bytes, err := scriptsNfts_in_boxCdcBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "scripts/nfts_in_box.cdc", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info: info, digest: [32]uint8{0xf1, 0x1, 0x1, 0xda, 0x7d, 0x97, 0x10, 0xef, 0xdd, 0x5d, 0x9d, 0xf, 0x29, 0x93, 0xab, 0x23, 0xbc, 0x6e, 0xa3, 0x58, 0x42, 0xd7, 0x73, 0x32, 0xd3, 0x61, 0x91, 0x87, 0x66, 0x2c, 0xd1, 0xc2}}
 	return a, nil
 }
 
@@ -438,7 +417,6 @@ var _bindata = map[string]func() (*asset, error){
 	"scripts/box_data.cdc":               scriptsBox_dataCdc,
 	"scripts/next_box_id.cdc":            scriptsNext_box_idCdc,
 	"scripts/nft_collection_length.cdc":  scriptsNft_collection_lengthCdc,
-	"scripts/nfts_in_box.cdc":            scriptsNfts_in_boxCdc,
 	"scripts/rox_nfts_total_supply.cdc":  scriptsRox_nfts_total_supplyCdc,
 	"transactions/adminBatchMintRox.cdc": transactionsAdminbatchmintroxCdc,
 	"transactions/adminMintBox.cdc":      transactionsAdminmintboxCdc,
@@ -498,7 +476,6 @@ var _bintree = &bintree{nil, map[string]*bintree{
 		"box_data.cdc": {scriptsBox_dataCdc, map[string]*bintree{}},
 		"next_box_id.cdc": {scriptsNext_box_idCdc, map[string]*bintree{}},
 		"nft_collection_length.cdc": {scriptsNft_collection_lengthCdc, map[string]*bintree{}},
-		"nfts_in_box.cdc": {scriptsNfts_in_boxCdc, map[string]*bintree{}},
 		"rox_nfts_total_supply.cdc": {scriptsRox_nfts_total_supplyCdc, map[string]*bintree{}},
 	}},
 	"transactions": {nil, map[string]*bintree{
