@@ -7,6 +7,7 @@ import (
 const (
 	setupUserFilename         = "transactions/setupUser.cdc"
 	adminMintBoxFilename      = "transactions/adminMintBox.cdc"
+	adminLockBoxFilename      = "transactions/adminLockBox.cdc"
 	adminMintRoxFilename      = "transactions/adminMintRox.cdc"
 	adminBatchMintRoxFilename = "transactions/adminBatchMintRox.cdc"
 	transferRoxFilename       = "transactions/transferRox.cdc"
@@ -24,6 +25,12 @@ func GenerateCreateCollectionScript(env Environment) []byte {
 
 func GenerateMintBoxTransaction(env Environment) []byte {
 	code := assets.MustAssetString(adminMintBoxFilename)
+
+	return []byte(replaceAddresses(code, env))
+}
+
+func GenerateLockBoxTransaction(env Environment) []byte {
+	code := assets.MustAssetString(adminLockBoxFilename)
 
 	return []byte(replaceAddresses(code, env))
 }

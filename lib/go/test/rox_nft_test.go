@@ -432,4 +432,22 @@ func TestTransferNFT(t *testing.T) {
 		result = executeScriptAndCheck(t, b, templates.GenerateTotalSupplyScript(env), nil)
 		assert.Equal(t, cadence.NewUInt64(1), result)
 	})
+
+	t.Run("Should be able to lock a box", func(t *testing.T) {
+		script = templates.GenerateLockBoxTransaction(env)
+		tx = createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
+		_ = tx.AddArgument(cadence.NewUInt32(1))
+		signAndSubmit(
+			t, b, tx,
+			[]flow.Address{
+				b.ServiceKey().Address,
+				tokenAddr,
+			},
+			[]crypto.Signer{
+				b.ServiceKey().Signer(),
+				tokenSigner,
+			},
+			false,
+		)
+	})
 }
