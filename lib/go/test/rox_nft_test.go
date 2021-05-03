@@ -449,5 +449,27 @@ func TestTransferNFT(t *testing.T) {
 			},
 			false,
 		)
+
+		script := templates.GenerateMintNFTTransaction(env)
+		tx := createTxWithTemplateAndAuthorizer(b, script, tokenAddr)
+
+		_ = tx.AddArgument(cadence.NewAddress(tokenAddr)) // Now it transfers to same minter account
+		_ = tx.AddArgument(cadence.NewUInt32(1))
+		_ = tx.AddArgument(cadence.NewString("1"))
+		_ = tx.AddArgument(cadence.NewString("2"))
+		_ = tx.AddArgument(cadence.NewDictionary([]cadence.KeyValuePair{}))
+
+		signAndSubmit(
+			t, b, tx,
+			[]flow.Address{
+				b.ServiceKey().Address,
+				tokenAddr,
+			},
+			[]crypto.Signer{
+				b.ServiceKey().Signer(),
+				tokenSigner,
+			},
+			true, // transaction is reverted
+		)
 	})
 }
