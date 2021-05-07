@@ -10,7 +10,8 @@
 		"NonFungibleToken": {
 			"source": "./contracts/NonFungibleToken.cdc",
 			"aliases": {
-				"testnet": "0x631e88ae7f1d7c20"
+				"testnet": "0x631e88ae7f1d7c20",
+				"mainnet": "0x1d7e57aa55817448"
 			}
 		}
 	},
@@ -22,6 +23,10 @@
 		"emulator": {
 			"host": "127.0.0.1:3569",
 			"chain": "emulator"
+		},
+		"mainnet": {
+			"host": "access.mainnet.nodes.onflow.org:9000",
+			"chain": "flow-mainnet"
 		}
 	},
 	"accounts": {
@@ -43,6 +48,11 @@
 		"emulator": {
 			"emulator-account": [
 				"NonFungibleToken",
+				"RoxContract"
+			]
+		},
+		"mainnet": {
+			"prod-mainnet-account":[
 				"RoxContract"
 			]
 		}
